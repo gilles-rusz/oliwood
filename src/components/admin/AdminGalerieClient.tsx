@@ -1,0 +1,147 @@
+'use client'
+
+import { useState, useRef } from 'react'
+import Image from 'next/image'
+import type { Realisation } from '@prisma/client'
+import { clsx } from 'clsx'
+
+const CATEGORIES = ['CHARPENTE','TERRASSE','PERGOLA','CABANE','RENOVATION','AUTRE'] as const
+
+interface Props {
+  realisations: Realisation[]
+}
+
+export function AdminGalerieClient({ realisations: initial }: Props) {
+  const [photos, setPhotos]   = useState<Realisation[]>(initial)
+  const [uploading, setUploading] = useState(false)
+  const [form, setForm]       = useState({ title: '', category: 'AUTRE', description: '' })
+  const fileRef               = useRef<HTMLInputElement>(null)
+
+  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      fd.append('title', form.title || file.name.replace(/\.\w+$/, ''))
+      fd.append('category', form.category)
+      fd.append('description', form.description)
+
+      const res  = await fetch('/api/upload', { method: 'POST', body: fd })
+      const data = await res.json()
+      if (data.realisation) {
+        setPhotos(prev => [data.realisation, ...prev])
+        setForm({ title: '', category: 'AUTRE', description: '' })
+      }
+    } finally {
+      setUploading(false)
+      if (fileRef.current) fileRef.current.value = ''
+    }
+  }
+
+  async function togglePublished(id: string, current: boolean) {
+    await fetch(`/api/realisations/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ published: !current }),
+    })
+    setPhotos(prev => prev.map(p => p.id === id ? { ...p, published: !current } : p))
+  }
+
+  async function deletePhoto(id: string) {
+    if (!confirm('Supprimer cette photo ?')) return
+    await fetch(`/api/realisations/${id}`, { method: 'DELETE' })
+    setPhotos(prev => prev.filter(p => p.id !== id))
+  }
+
+  return (
+    <div>
+      {/* Upload form */}
+      <div className="bg-dark-800 border border-cream/5 border-dashed p-6 mb-8">
+        <p className="text-xs tracking-widest uppercase text-cream/40 mb-4">Ajouter une photo</p>
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="form-label">Titre</label>
+            <input
+              className="form-input"
+              value={form.title}
+              onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+              placeholder="Ex : Terrasse pin maritime"
+            />
+          </div>
+          <div>
+            <label className="form-label">Catégorie</label>
+            <select
+              className="form-input"
+              value={form.category}
+              onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
+            >
+              {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+        </div>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleUpload}
+          id="photo-upload"
+        />
+        <label
+          htmlFor="photo-upload"
+          className={clsx('btn-outline text-xs cursor-pointer', uploading && 'opacity-50 pointer-events-none')}
+        >
+          {uploading ? 'Envoi en cours…' : '+ Choisir une photo'}
+        </label>
+      </div>
+
+      {/* Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+        {photos.map((p) => (
+          <div key={p.id} className={clsx('relative group', !p.published && 'opacity-50')}>
+            <div className="aspect-[4/3] relative overflow-hidden bg-dark-700">
+              <Image
+                src={p.thumbUrl || p.imageUrl}
+                alt={p.title}
+                fill
+                className="object-cover"
+                sizes="(max-width:1024px) 50vw, 33vw"
+              />
+              {/* Source badge */}
+              {p.source !== 'MANUAL' && (
+                <span className="absolute top-2 left-2 text-[0.6rem] bg-dark-900/80 text-wood-400 px-2 py-0.5 tracking-widest uppercase">
+                  {p.source}
+                </span>
+              )}
+            </div>
+            <div className="mt-2 flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-cream text-xs font-medium truncate">{p.title}</p>
+                <p className="text-cream/30 text-[0.6rem] tracking-widest">{p.category}</p>
+              </div>
+              <div className="flex gap-1 shrink-0">
+                <button
+                  onClick={() => togglePublished(p.id, p.published)}
+                  className="text-[0.6rem] px-2 py-1 border border-cream/10 text-cream/40 hover:text-cream hover:border-cream/30"
+                  title={p.published ? 'Masquer' : 'Publier'}
+                >
+                  {p.published ? '●' : '○'}
+                </button>
+                <button
+                  onClick={() => deletePhoto(p.id)}
+                  className="text-[0.6rem] px-2 py-1 border border-red-400/10 text-red-400/40 hover:text-red-400 hover:border-red-400/40"
+                  title="Supprimer"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}

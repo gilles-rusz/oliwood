@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth'
 import { createClient } from '@supabase/supabase-js'
 import { prisma } from '@/lib/prisma'
 import { v4 as uuidv4 } from 'uuid'
@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
   const title    = formData.get('title')    as string
   const category = formData.get('category') as string
   const description = formData.get('description') as string
+  const featured = formData.get('featured') === 'true'
 
   if (!file) return NextResponse.json({ error: 'Pas de fichier' }, { status: 400 })
 
@@ -58,6 +59,7 @@ export async function POST(req: NextRequest) {
       thumbUrl:    publicUrl,
       source:      'MANUAL',
       published:   true,
+      featured,
     },
   })
 

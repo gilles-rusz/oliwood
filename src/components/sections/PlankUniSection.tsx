@@ -14,7 +14,7 @@ export function PlankUniSection() {
         <p style={{
           fontFamily: "'Khand', sans-serif",
           fontSize: '20px',
-          color: 'rgba(244,241,236,.7)',
+          color: 'rgba(255,255,255,.92)',
           fontWeight: 300,
           maxWidth: 620,
           margin: '0 auto',

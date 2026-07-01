@@ -16,14 +16,14 @@ export function AdminSidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="fixed left-0 top-0 w-60 h-screen bg-dark-800 border-r border-cream/5 flex flex-col">
+    <aside className="fixed left-0 top-0 w-60 h-screen bg-brun border-r border-jaune/10 flex flex-col">
       {/* Logo */}
-      <div className="p-6 border-b border-cream/5">
+      <div className="p-6 border-b border-jaune/10">
         <p className="font-display text-lg font-bold">
-          <span className="text-wood-400">Oli</span>
+          <span className="text-jaune">Oli</span>
           <span className="text-cream">Wood</span>
         </p>
-        <p className="text-cream/30 text-[0.6rem] tracking-widest uppercase mt-1">Admin</p>
+        <p className="text-cream/40 text-[0.6rem] tracking-widest uppercase mt-1">Admin</p>
       </div>
 
       {/* Nav */}
@@ -49,10 +49,10 @@ export function AdminSidebar() {
       </nav>
 
       {/* Déconnexion */}
-      <div className="p-4 border-t border-cream/5">
+      <div className="p-4 border-t border-jaune/10">
         <button
           onClick={() => signOut({ callbackUrl: '/admin/login' })}
-          className="w-full text-left px-3 py-2 text-sm text-cream/30 hover:text-red-400 transition-colors"
+          className="w-full text-left px-3 py-2 text-sm text-cream/40 hover:text-red-400 transition-colors"
         >
           Déconnexion
         </button>

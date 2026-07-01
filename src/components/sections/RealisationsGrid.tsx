@@ -6,14 +6,17 @@ import type { Realisation } from '@prisma/client'
 import { clsx } from 'clsx'
 
 const CATEGORIES = [
-  { value: undefined,       label: 'Tous' },
-  { value: 'CHARPENTE',     label: 'Charpente' },
-  { value: 'TERRASSE',      label: 'Terrasse' },
-  { value: 'PERGOLA',       label: 'Pergola' },
-  { value: 'CABANE',        label: 'Cabane' },
-  { value: 'RENOVATION',    label: 'Rénovation' },
-  { value: 'AUTRE',         label: 'Autre' },
+  { value: undefined,        label: 'Tous' },
+  { value: 'OSSATURE_BOIS',  label: 'Ossature bois' },
+  { value: 'CHARPENTE',      label: 'Charpente' },
+  { value: 'CARPORT',        label: 'Carport' },
+  { value: 'PERGOLA',        label: 'Pergola' },
+  { value: 'TERRASSE',       label: 'Terrasse' },
 ]
+
+function categoryLabel(value: string) {
+  return CATEGORIES.find(c => c.value === value)?.label ?? value
+}
 
 interface Props {
   realisations: Realisation[]
@@ -70,10 +73,10 @@ export function RealisationsGrid({ realisations, activeCategory }: Props) {
               />
               <div className="absolute inset-0 bg-dark-900/0 group-hover:bg-dark-900/65 transition-all duration-300 flex items-end p-5">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">
-                  <p className="text-xs tracking-widest text-wood-400 uppercase mb-1">{r.category}</p>
+                  <p className="text-xs tracking-widest text-wood-400 uppercase mb-1">{categoryLabel(r.category)}</p>
                   <p className="font-display font-bold text-cream">{r.title}</p>
                   {r.description && (
-                    <p className="text-cream/60 text-xs mt-1 line-clamp-2">{r.description}</p>
+                    <p className="text-cream/90 text-xs mt-1 line-clamp-2">{r.description}</p>
                   )}
                 </div>
               </div>

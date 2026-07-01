@@ -82,15 +82,37 @@ export function AdminDevisClient({ devis: initial }: Props) {
             >
               <div className="min-w-0">
                 <p className="text-cream text-sm font-medium">{d.prenom} {d.nom}</p>
-                <p className="text-cream/40 text-xs truncate">{d.typeProjet} · {d.email}</p>
-              </div>
-              <div className="text-right shrink-0 ml-4">
-                <span className={clsx('text-[0.6rem] px-2 py-0.5 tracking-widest uppercase', STATUT_COLORS[d.statut])}>
-                  {d.statut}
-                </span>
-                <p className="text-cream/25 text-[0.6rem] mt-1">
-                  {new Date(d.createdAt).toLocaleDateString('fr-FR')}
+                <p className="text-cream/40 text-xs truncate">
+                  {d.typeProjet} · {d.telephone ?? d.email}
                 </p>
+              </div>
+              <div className="flex items-center gap-3 shrink-0 ml-4">
+                {d.statut === 'NOUVEAU' && (
+                  <button
+                    onClick={e => { e.stopPropagation(); updateStatut(d.id, 'VU') }}
+                    className="text-[0.6rem] px-2 py-1 border border-wood-400/30 text-wood-400 hover:bg-wood-400/10 tracking-widest uppercase"
+                    title="Marquer comme lu"
+                  >
+                    Marquer lu
+                  </button>
+                )}
+                {(d.statut === 'VU' || d.statut === 'EN_COURS') && (
+                  <button
+                    onClick={e => { e.stopPropagation(); updateStatut(d.id, 'ENVOYE') }}
+                    className="text-[0.6rem] px-2 py-1 border border-green-400/30 text-green-400 hover:bg-green-400/10 tracking-widest uppercase"
+                    title="Marquer comme traité"
+                  >
+                    Marquer traité
+                  </button>
+                )}
+                <div className="text-right">
+                  <span className={clsx('text-[0.6rem] px-2 py-0.5 tracking-widest uppercase', STATUT_COLORS[d.statut])}>
+                    {d.statut}
+                  </span>
+                  <p className="text-cream/25 text-[0.6rem] mt-1">
+                    {new Date(d.createdAt).toLocaleDateString('fr-FR')}
+                  </p>
+                </div>
               </div>
             </div>
           ))}

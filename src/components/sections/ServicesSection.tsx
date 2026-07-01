@@ -1,23 +1,19 @@
 const SERVICES = [
   {
-    ico: '🇫🇷',
-    title: '100 % Français',
-    desc: 'Une menuiserie implantée dans le Jura, un bois local sélectionné avec soin et un savoir-faire transmis de génération en génération.',
+    title: 'Ossature bois',
+    desc: 'Conception et construction de bâtiments à ossature bois, de l\'étude technique à la pose : structure porteuse, isolation et finitions.',
   },
   {
-    ico: '🏗️',
-    title: 'Terrasse & Pergola',
-    desc: 'Espaces extérieurs durables en bois massif, conçus pour s\'harmoniser avec votre environnement.',
+    title: 'Charpente',
+    desc: 'Charpentes traditionnelles ou industrielles, en neuf comme en rénovation : étude, taille et levage assurés par notre équipe.',
   },
   {
-    ico: '🏡',
-    title: 'Cabane & Abri',
-    desc: 'Des créations uniques — cabanes, chalets, studios de jardin et espaces de vie atypiques.',
+    title: 'Carport & Abris',
+    desc: 'Structures autoportées ou adossées pour protéger véhicules, matériel et bois de chauffage, adaptées à votre terrain.',
   },
   {
-    ico: '🔨',
-    title: 'Rénovation',
-    desc: 'Restauration de charpentes anciennes, remplacement de poutres, mise aux normes et consolidation.',
+    title: 'Pergola & Terrasse',
+    desc: 'Aménagements extérieurs en bois massif — pergolas bioclimatiques, terrasses sur plots ou pilotis — pour prolonger votre espace de vie.',
   },
 ]
 
@@ -32,7 +28,7 @@ export function ServicesSection() {
             fontSize: 'clamp(30px,4.5vw,52px)',
             color: 'var(--jaune)', marginBottom: '16px',
           }}>
-            Pourquoi choisir Oli'Wood ?
+            Nos savoir-faire
           </h2>
           <p style={{
             fontFamily: "'Khand', sans-serif",
@@ -48,7 +44,7 @@ export function ServicesSection() {
           gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))',
           gap: '24px',
         }}>
-          {SERVICES.map(({ ico, title, desc }) => (
+          {SERVICES.map(({ title, desc }) => (
             <div key={title} style={{
               background: 'var(--creme)',
               borderRadius: '16px',
@@ -57,13 +53,6 @@ export function ServicesSection() {
               borderTop: '5px solid var(--jaune)',
               transition: 'transform .25s',
             }}>
-              <div style={{
-                width: 56, height: 56, borderRadius: 14,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: 'var(--brun)', fontSize: 26, marginBottom: 18,
-              }}>
-                {ico}
-              </div>
               <h3 style={{
                 fontFamily: "'Oleo Script', cursive",
                 fontSize: '24px', color: 'var(--brun)', marginBottom: '10px',

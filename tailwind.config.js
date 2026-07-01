@@ -8,12 +8,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        brun:  '#6b2902',
+        jaune: '#ffe014',
         wood: {
           50:  '#fdf6ec',
           100: '#f7e4c4',
           200: '#efc88a',
           300: '#e5a84d',
-          400: '#c8823c',   // accent principal OliWood
+          400: '#ffe014',   // accent principal OliWood (jaune de la charte)
           500: '#a8621e',
           600: '#8a4a10',
           700: '#6b3509',

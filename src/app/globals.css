@@ -105,7 +105,7 @@ body {
   /* ── Admin / kept classes ── */
   .font-display { font-family: var(--font-playfair); }
   .text-cream       { color: #f0e8d8; }
-  .text-cream-muted { color: rgba(240,232,216,.65); }
+  .text-cream-muted { color: rgba(255,255,255,.92); }
   .text-accent      { color: #c8823c; }
 
   .btn-primary {

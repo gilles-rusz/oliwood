@@ -3,9 +3,9 @@ import Image from 'next/image'
 import type { Realisation } from '@prisma/client'
 
 const PLACEHOLDERS = [
-  { tag: 'Pergola',  title: 'Pergola adossée',    desc: 'Bois lasuré, toiture polycarbonate.' },
-  { tag: 'Carport',  title: 'Carport double',      desc: 'Structure autoportée, couverture bac acier.' },
-  { tag: 'Terrasse', title: 'Terrasse sur pilotis', desc: 'Lames bois saturateur incolore.' },
+  { tag: 'Carport',  title: 'Carport bois massif',    desc: '', img: '/images/carport.jpg' },
+  { tag: 'Pergola',  title: 'Pergola bioclimatique',  desc: '', img: '/images/pergola.jpg' },
+  { tag: 'Terrasse', title: 'Terrasse sur pilotis',   desc: '', img: '/images/terrasse.jpg' },
 ]
 
 interface Props { realisations: Realisation[] }
@@ -18,7 +18,7 @@ export function RealisationsPreview({ realisations }: Props) {
         desc:  '',
         img:   r.thumbUrl || r.imageUrl,
       }))
-    : PLACEHOLDERS.map(p => ({ ...p, img: null }))
+    : PLACEHOLDERS
 
   return (
     <section style={{ background: 'transparent', padding: '80px 0' }}>
@@ -34,7 +34,7 @@ export function RealisationsPreview({ realisations }: Props) {
           </h2>
           <p style={{
             fontFamily: "'Khand', sans-serif",
-            fontSize: '19px', color: 'var(--creme)', fontWeight: 300, opacity: .8,
+            fontSize: '19px', color: 'rgba(255,255,255,.92)', fontWeight: 300,
           }}>
             Un aperçu de nos projets ossature bois.
           </p>

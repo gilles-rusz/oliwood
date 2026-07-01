@@ -68,13 +68,24 @@ export function Footer() {
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {[
-                '📍 Adresse à compléter',
-                '📞 00 00 00 00 00',
-                '✉ contact@oliwood.fr',
-                '🕐 Lun–Sam, 8h–19h',
-              ].map(item => (
-                <li key={item} style={{ fontFamily: "'Khand', sans-serif", fontWeight: 300, fontSize: '16px', color: 'var(--gris-clair)' }}>
-                  {item}
+                { label: '📍 9 Rue du Tongea, 39260 Moirans-en-Montagne' },
+                { label: '📞 00 00 00 00 00' },
+                { label: '✉ contact@oliwood.fr' },
+                { label: '🕐 Lun–Sam, 8h–19h' },
+                { label: '📘 Facebook', href: 'https://www.facebook.com/OliWood.OssatureBois' },
+              ].map(({ label, href }) => (
+                <li key={label} style={{ fontFamily: "'Khand', sans-serif", fontWeight: 300, fontSize: '16px', color: 'var(--gris-clair)' }}>
+                  {href ? (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: 'var(--gris-clair)', textDecoration: 'none' }}
+                      className="hover:text-yellow-300"
+                    >
+                      {label}
+                    </a>
+                  ) : label}
                 </li>
               ))}
             </ul>
@@ -89,7 +100,7 @@ export function Footer() {
           alignItems: 'center', justifyContent: 'space-between', gap: '12px',
         }}>
           <span style={{ fontFamily: "'Khand', sans-serif", fontSize: '14px', color: 'rgba(216,207,200,.5)' }}>
-            © {year} Oli'Wood — Tous droits réservés.
+            © {year} Oli'Wood — SARL au RCS 883 952 681. Tous droits réservés.
           </span>
           <span style={{ display: 'flex', gap: '20px' }}>
             {[
@@ -101,6 +112,15 @@ export function Footer() {
               </Link>
             ))}
           </span>
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: '18px' }}>
+          <Link
+            href="/admin/login"
+            style={{ fontFamily: "'Khand', sans-serif", fontSize: '11px', color: 'rgba(216,207,200,.22)', textDecoration: 'none' }}
+          >
+            Espace admin
+          </Link>
         </div>
       </div>
     </footer>

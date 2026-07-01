@@ -16,17 +16,17 @@ export default function AProposPage() {
           textTransform: 'uppercase', letterSpacing: '3px', fontSize: '14px',
           color: 'var(--jaune)', marginBottom: '16px',
         }}>
-          Notre histoire
+          L&apos;aventure Oli&apos;Wood
         </span>
 
         <h1 style={{
           fontFamily: "'Oleo Script', cursive",
-          fontSize: 'clamp(36px, 6vw, 68px)',
+          fontSize: 'clamp(32px, 5.5vw, 58px)',
           color: 'var(--jaune)',
-          lineHeight: 1.1,
+          lineHeight: 1.15,
           marginBottom: '32px',
         }}>
-          À propos d&apos;Oli&apos;Wood
+          Notre histoire
         </h1>
 
         <div style={{
@@ -37,19 +37,13 @@ export default function AProposPage() {
           display: 'flex', flexDirection: 'column', gap: '20px',
         }}>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Tout a commencé dans le garage de sa maman, à Phalsbourg. Olivier, seul avec ses outils et sa passion du bois, posait les premières pièces de ce qui allait devenir bien plus qu&apos;une petite entreprise. Pas de grande structure, pas d&apos;investisseurs — juste un artisan déterminé, une scie, et l&apos;envie de bien faire.
           </p>
           <p>
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-            fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            Au fil des chantiers et des clients conquis, la petite structure a grandi. Olivier a pu quitter le garage familial pour acquérir son propre atelier — un grand espace où il pouvait enfin donner libre cours à ses créations, prendre des projets d&apos;envergure et constituer sa première vraie clientèle.
           </p>
           <p>
-            Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac
-            turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit
-            amet, ante. Donec eu libero sit amet quam egestas semper.
+            Puis est venu le Jura. Ce déménagement dans les montagnes du 39 marquait une nouvelle étape : c&apos;est ici, à Moirans-en-Montagne, qu&apos;est née Oli&apos;Wood. Une nouvelle identité, un nouveau territoire, mais le même ADN — un artisan passionné, une équipe soudée, zéro sous-traitance, et depuis une quinzaine d&apos;années maintenant, plus de 200 projets réalisés pour des clients qui voulaient du bois bien travaillé, sur-mesure, et pensé pour durer.
           </p>
         </div>
 

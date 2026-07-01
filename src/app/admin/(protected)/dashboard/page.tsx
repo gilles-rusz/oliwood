@@ -1,16 +1,14 @@
+import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 
 export default async function AdminDashboard() {
-  const [totalPhotos, totalDevis, devisNouveaux] = await Promise.all([
+  const [totalPhotos, totalDevis, devisNouveaux, lastPhoto, recentDevis] = await Promise.all([
     prisma.realisation.count(),
     prisma.devis.count(),
     prisma.devis.count({ where: { statut: 'NOUVEAU' } }),
+    prisma.realisation.findFirst({ orderBy: { createdAt: 'desc' } }),
+    prisma.devis.findMany({ orderBy: { createdAt: 'desc' }, take: 5 }),
   ])
-
-  const recentDevis = await prisma.devis.findMany({
-    orderBy: { createdAt: 'desc' },
-    take: 5,
-  })
 
   return (
     <div>
@@ -19,9 +17,9 @@ export default async function AdminDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-10">
         {[
-          { label: 'Photos en ligne',  value: totalPhotos  },
-          { label: 'Devis reçus',      value: totalDevis   },
-          { label: 'Nouveaux devis',   value: devisNouveaux, highlight: true },
+          { label: 'Réalisations',   value: totalPhotos  },
+          { label: 'Devis reçus',    value: totalDevis   },
+          { label: 'Devis non lus',  value: devisNouveaux, highlight: true },
         ].map(({ label, value, highlight }) => (
           <div key={label} className="bg-dark-800 border border-cream/5 p-5">
             <p className="text-cream/40 text-xs tracking-widest uppercase mb-2">{label}</p>
@@ -30,6 +28,33 @@ export default async function AdminDashboard() {
             </p>
           </div>
         ))}
+      </div>
+
+      {/* Dernière photo ajoutée */}
+      <div className="mb-10">
+        <h2 className="text-sm tracking-widest uppercase text-cream/40 mb-4">Dernière photo ajoutée</h2>
+        {lastPhoto ? (
+          <div className="bg-dark-800 border border-cream/5 p-4 flex items-center gap-4 max-w-md">
+            <div className="relative w-20 h-20 shrink-0 overflow-hidden bg-dark-700">
+              <Image
+                src={lastPhoto.thumbUrl || lastPhoto.imageUrl}
+                alt={lastPhoto.title}
+                fill
+                className="object-cover"
+                sizes="80px"
+              />
+            </div>
+            <div className="min-w-0">
+              <p className="text-cream text-sm font-medium truncate">{lastPhoto.title}</p>
+              <p className="text-cream/40 text-xs mt-0.5">{lastPhoto.category}</p>
+              <p className="text-cream/30 text-xs mt-1">
+                Ajoutée le {new Date(lastPhoto.createdAt).toLocaleDateString('fr-FR')}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <p className="text-cream/30 text-sm">Aucune photo ajoutée pour l&apos;instant.</p>
+        )}
       </div>
 
       {/* Derniers devis */}

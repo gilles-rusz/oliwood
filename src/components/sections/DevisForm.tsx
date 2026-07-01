@@ -101,7 +101,7 @@ export function DevisForm() {
       <div className="text-center py-20">
         <div className="text-wood-400 text-5xl mb-6">✓</div>
         <h2 className="font-display text-2xl font-bold text-cream mb-3">Demande envoyée !</h2>
-        <p className="text-cream/60 text-sm">
+        <p className="text-cream/90 text-sm">
           Nous avons bien reçu votre demande et vous répondrons sous 48h.
         </p>
       </div>
@@ -143,7 +143,7 @@ export function DevisForm() {
       {/* ── Étape 0 — Type de projet ── */}
       {step === 0 && (
         <div className="space-y-3">
-          <p className="text-cream/70 text-sm mb-6">Quel type de projet souhaitez-vous réaliser ?</p>
+          <p className="text-cream/90 text-sm mb-6">Quel type de projet souhaitez-vous réaliser ?</p>
           {TYPES_PROJET.map(({ value, label, desc }) => (
             <button
               key={value}
@@ -157,7 +157,7 @@ export function DevisForm() {
               )}
             >
               <p className="font-medium text-cream text-sm">{label}</p>
-              <p className="text-cream/40 text-xs mt-0.5">{desc}</p>
+              <p className="text-cream/75 text-xs mt-0.5">{desc}</p>
             </button>
           ))}
           {errors.typeProjet && <p className="form-error">{errors.typeProjet.message}</p>}
@@ -167,7 +167,7 @@ export function DevisForm() {
       {/* ── Étape 1 — Budget ── */}
       {step === 1 && (
         <div className="space-y-3">
-          <p className="text-cream/70 text-sm mb-6">Quel est votre budget approximatif ?</p>
+          <p className="text-cream/90 text-sm mb-6">Quel est votre budget approximatif ?</p>
           <div className="grid grid-cols-2 gap-2">
             {BUDGETS.map(({ value, label }) => (
               <button
@@ -178,7 +178,7 @@ export function DevisForm() {
                   'px-4 py-3 border text-sm transition-all duration-200 text-left',
                   budget === value
                     ? 'border-wood-400 text-wood-400 bg-wood-400/10'
-                    : 'border-cream/10 text-cream/60 bg-dark-800 hover:border-cream/25 hover:text-cream/80'
+                    : 'border-cream/10 text-cream/85 bg-dark-800 hover:border-cream/25 hover:text-cream/95'
                 )}
               >
                 {label}
@@ -197,7 +197,7 @@ export function DevisForm() {
       {/* ── Étape 2 — Description ── */}
       {step === 2 && (
         <div className="space-y-5">
-          <p className="text-cream/70 text-sm mb-2">Décrivez votre projet (optionnel)</p>
+          <p className="text-cream/90 text-sm mb-2">Décrivez votre projet (optionnel)</p>
           <div>
             <label className="form-label">Description</label>
             <textarea
@@ -231,7 +231,7 @@ export function DevisForm() {
       {/* ── Étape 3 — Coordonnées ── */}
       {step === 3 && (
         <div className="space-y-4">
-          <p className="text-cream/70 text-sm mb-4">Vos coordonnées pour vous recontacter</p>
+          <p className="text-cream/90 text-sm mb-4">Vos coordonnées pour vous recontacter</p>
 
           <div className="grid grid-cols-2 gap-4">
             <div>

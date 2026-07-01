@@ -3,6 +3,7 @@
 
 import { createInterface } from 'readline'
 import { createHash } from 'crypto'
+import bcrypt from 'bcryptjs'
 
 // Charger les env vars depuis .env.local
 const fs = await import('fs')
@@ -18,7 +19,6 @@ if (fs.existsSync(envPath)) {
 }
 
 const { PrismaClient } = await import('@prisma/client')
-const bcrypt = await import('bcryptjs')
 
 const prisma = new PrismaClient()
 

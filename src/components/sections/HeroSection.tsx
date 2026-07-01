@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { LogoImage } from '@/components/ui/LogoImage'
 
 export function HeroSection() {
   const contentRef = useRef<HTMLDivElement>(null)
@@ -17,51 +16,62 @@ export function HeroSection() {
     <section style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}>
 
       {/* ── Photo de fond ── */}
-      <Image src="/images/hero.jpg" alt="" fill priority style={{ objectFit: 'cover' }} />
+      <Image src="/images/hero.jpg" alt="Charpente ossature bois Oli'Wood à Moirans-en-Montagne, Jura" fill priority style={{ objectFit: 'cover' }} />
 
-      {/* ── Voile sombre brun ── */}
-      <div style={{ position: 'absolute', inset: 0, background: 'rgba(74,28,1,.52)' }} />
+      {/* ── Dégradé sombre côté gauche uniquement ── */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: 'linear-gradient(90deg, rgba(74,28,1,.9) 0%, rgba(74,28,1,.66) 32%, rgba(74,28,1,.2) 62%, transparent 85%)',
+      }} />
 
-      {/* ── Contenu centré ── */}
+      {/* ── Contenu, aligné à gauche ── */}
       <div
         ref={contentRef}
         className="hero-content-wrap"
         style={{
-          position: 'absolute', inset: 0, zIndex: 10,
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center',
-          paddingBottom: '6vh', textAlign: 'center', padding: '0 16px',
+          position: 'relative', zIndex: 10, height: '100%',
+          display: 'flex', flexDirection: 'column', justifyContent: 'center',
+          maxWidth: 620, padding: '0 24px',
+          marginLeft: 'clamp(16px, 6vw, 90px)',
         }}
       >
-        {/* Logo + halo jaune */}
-        <div style={{ position: 'relative', marginBottom: '4px' }}>
-          <div style={{
-            position: 'absolute', inset: '-40%',
-            background: 'radial-gradient(circle, rgba(255,224,20,.32), transparent 65%)',
-            pointerEvents: 'none',
-          }} />
-          <LogoImage width={270} height={160} style={{ position: 'relative', display: 'block' }} />
-        </div>
+        <span style={{
+          fontFamily: "'Khand', sans-serif",
+          color: 'var(--jaune)',
+          fontSize: 'clamp(.8rem, 1.6vw, .95rem)',
+          letterSpacing: '.35em',
+          textTransform: 'uppercase',
+          fontWeight: 600,
+          marginBottom: '18px',
+        }}>
+          Artisan menuisier · Ossature bois
+        </span>
 
-       
+        <h1 style={{
+          fontFamily: "'Oleo Script', cursive",
+          fontSize: 'clamp(38px, 6vw, 68px)',
+          color: 'var(--creme)',
+          lineHeight: 1.1,
+          marginBottom: '20px',
+        }}>
+          Le bois, travaillé à votre image.
+        </h1>
 
-        {/* Sous-titre */}
         <p style={{
           fontFamily: "'Khand', sans-serif",
           color: 'var(--creme)',
-          fontSize: 'clamp(.8rem, 1.8vw, 1rem)',
-          letterSpacing: '.45em',
-          textTransform: 'uppercase',
-          marginTop: '12px',
-          opacity: .82,
+          fontSize: 'clamp(1rem, 1.8vw, 1.2rem)',
+          fontWeight: 300,
+          lineHeight: 1.5,
+          opacity: .9,
+          marginBottom: '34px',
         }}>
-          Charpenterie &amp; Construction Bois
+          Installés à Moirans-en-Montagne, dans le Jura, nous concevons et fabriquons vos structures bois sur mesure — de l&apos;étude à la pose.
         </p>
 
-        {/* CTA */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0', justifyContent: 'center', marginTop: '36px' }}>
-          <Link href="/devis" className="btn-primary-ow">Demander mon devis</Link>
-          <Link href="/realisations" className="btn-ghost-ow">Voir nos réalisations</Link>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px' }}>
+          <Link href="/realisations" className="btn-ghost-ow" style={{ marginLeft: 0 }}>Nos réalisations</Link>
+          <Link href="/devis" className="btn-primary-ow">Devis gratuit →</Link>
         </div>
       </div>
 

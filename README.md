@@ -111,7 +111,7 @@ https://votre-domaine.com/api/webhooks/facebook
 ## 🎄 Décors saisonniers
 
 Dans l'admin → Réglages → Décoration saisonnière :
-- Choisir un thème : **Noël** (guirlande lumineuse, branche de sapin, houx, sapins + Père Noël, neige) ou **Printemps** (cerisiers en fleurs, pétales, prairie fleurie, papillon)
+- Choisir un thème : **Noël** (guirlande lumineuse, houx dans les angles hauts, sapin décoré, boules de Noël, neige, + photo hero enneigée `public/images/hero-noel.jpg`) ou **Printemps** (cerisiers en fleurs, pétales, prairie fleurie, papillon)
 - Le clic sur un thème affiche un **aperçu immédiat** dans l'admin
 - Le bouton *Visible par les visiteurs* + *Enregistrer* applique le décor sur le site public (les pages statiques sont revalidées automatiquement)
 - Décors allégés sur mobile et désactivés si le visiteur a activé « réduire les animations »

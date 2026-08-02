@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export function HeroSection() {
+export function HeroSection({ noel = false }: { noel?: boolean }) {
   const contentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -16,7 +16,13 @@ export function HeroSection() {
     <section style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}>
 
       {/* ── Photo de fond ── */}
-      <Image src="/images/hero.jpg" alt="Charpente ossature bois Oli'Wood à Moirans-en-Montagne, Jura" fill priority style={{ objectFit: 'cover' }} />
+      <Image
+        src={noel ? '/images/hero-noel.jpg' : '/images/hero.jpg'}
+        alt="Charpente ossature bois Oli'Wood à Moirans-en-Montagne, Jura"
+        fill
+        priority
+        style={{ objectFit: 'cover' }}
+      />
 
       {/* ── Dégradé sombre côté gauche uniquement ── */}
       <div style={{

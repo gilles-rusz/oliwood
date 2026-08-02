@@ -48,8 +48,14 @@ export function AdminSidebar() {
         </ul>
       </nav>
 
-      {/* Déconnexion */}
-      <div className="p-4 border-t border-jaune/10">
+      <div className="p-4 border-t border-jaune/10 space-y-1">
+        <Link
+          href="/"
+          target="_blank"
+          className="block px-3 py-2 text-sm text-cream/60 hover:text-jaune transition-colors"
+        >
+          Voir le site public ↗
+        </Link>
         <button
           onClick={() => signOut({ callbackUrl: '/admin/login' })}
           className="w-full text-left px-3 py-2 text-sm text-cream/40 hover:text-red-400 transition-colors"

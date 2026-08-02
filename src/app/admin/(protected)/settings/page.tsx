@@ -106,7 +106,7 @@ export default function AdminSettingsPage() {
                 )} />
               </div>
               <span className="text-sm text-cream/60">
-                {active ? 'Visible par les visiteurs' : 'Masqué pour les visiteurs'}
+                Thème visible sur le site : <strong className={active ? 'text-jaune' : 'text-cream/70'}>{active ? 'Oui' : 'Non'}</strong>
               </span>
             </label>
 

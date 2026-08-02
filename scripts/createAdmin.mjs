@@ -5,12 +5,14 @@ import { createInterface } from 'readline'
 import { createHash } from 'crypto'
 import bcrypt from 'bcryptjs'
 
-// Charger les env vars depuis .env.local
+// Charger les env vars depuis .env.local ou .env
 const fs = await import('fs')
 const path = await import('path')
 
-const envPath = path.join(process.cwd(), '.env.local')
-if (fs.existsSync(envPath)) {
+const envPath = ['.env.local', '.env']
+  .map(f => path.join(process.cwd(), f))
+  .find(p => fs.existsSync(p))
+if (envPath) {
   const lines = fs.readFileSync(envPath, 'utf-8').split('\n')
   for (const line of lines) {
     const [key, ...vals] = line.split('=')

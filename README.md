@@ -6,28 +6,35 @@ Stack : **Next.js 14** · **Supabase** · **Prisma** · **NextAuth** · **Tailwi
 
 ## 🚀 Installation rapide
 
+### Développement local (sans Supabase)
+
+Docker Desktop doit être installé et démarré.
+
 ```bash
-# 1. Installer les dépendances
 npm install
-
-# 2. Copier le fichier d'environnement
-cp .env.example .env.local
-# → Remplir toutes les variables dans .env.local
-
-# 3. Générer le client Prisma
-npm run db:generate
-
-# 4. Pousser le schéma vers Supabase
-npm run db:push
-
-# 5. Créer le compte admin
-node scripts/createAdmin.mjs
-
-# 6. Lancer en développement
+npm run setup:local
+npm run admin:create
 npm run dev
 ```
 
-Ouvrir [http://localhost:3000](http://localhost:3000)
+`setup:local` crée automatiquement `.env`, démarre PostgreSQL dans Docker et initialise les tables. Ouvrir [http://localhost:3000](http://localhost:3000), puis l'admin sur [http://localhost:3000/admin/login](http://localhost:3000/admin/login).
+
+Pour arrêter la base locale :
+
+```bash
+npm run db:local:stop
+```
+
+### Connexion à Supabase
+
+```bash
+cp .env.example .env
+# Remplir les variables Supabase et PostgreSQL dans .env
+npm run db:generate
+npm run db:push
+npm run admin:create
+npm run dev
+```
 
 ---
 

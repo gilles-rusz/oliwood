@@ -1,30 +1,54 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { clsx } from 'clsx'
+import { SEASONAL_LABELS, SEASONAL_THEMES } from '@/lib/seasonal'
+import { SeasonalDecorations } from '@/components/ui/SeasonalDecorations'
 
-const THEMES = [
-  { value: null,        label: 'Aucun', icon: '○', desc: 'Site normal' },
-  { value: 'NOEL',      label: 'Noël',  icon: '❄', desc: 'Flocons de neige animés' },
-  { value: 'PRINTEMPS', label: 'Printemps', icon: '🌸', desc: 'Pétales de fleurs' },
+const THEMES: { value: string | null; label: string; icon: string; desc: string }[] = [
+  { value: null, label: 'Aucun', icon: '○', desc: 'Site normal' },
+  ...SEASONAL_THEMES.map(value => ({ value, ...SEASONAL_LABELS[value] })),
 ]
 
 export default function AdminSettingsPage() {
+  const [loading, setLoading] = useState(true)
   const [saving, setSaving]   = useState(false)
   const [saved, setSaved]     = useState(false)
+  const [error, setError]     = useState<string | null>(null)
   const [theme, setTheme]     = useState<string | null>(null)
   const [active, setActive]   = useState(false)
+  const [preview, setPreview] = useState(false)
+
+  useEffect(() => {
+    fetch('/api/admin/settings')
+      .then(res => (res.ok ? res.json() : Promise.reject(new Error('Chargement impossible'))))
+      .then(({ seasonalTheme, seasonalActive }) => {
+        setTheme(seasonalTheme)
+        setActive(seasonalActive)
+      })
+      .catch(() => setError('Impossible de charger les réglages actuels.'))
+      .finally(() => setLoading(false))
+  }, [])
+
+  function selectTheme(value: string | null) {
+    setTheme(value)
+    setPreview(value !== null)
+  }
 
   async function saveSettings() {
     setSaving(true)
+    setError(null)
     try {
-      await fetch('/api/admin/settings', {
+      const res = await fetch('/api/admin/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ seasonalTheme: theme, seasonalActive: active }),
+        body: JSON.stringify({ seasonalTheme: theme, seasonalActive: theme ? active : false }),
       })
+      if (!res.ok) throw new Error('Enregistrement impossible')
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
+    } catch {
+      setError("L'enregistrement a échoué. Réessaie dans un instant.")
     } finally {
       setSaving(false)
     }
@@ -32,14 +56,17 @@ export default function AdminSettingsPage() {
 
   return (
     <div className="max-w-2xl">
+      {/* Aperçu live des décors, par-dessus l'admin */}
+      {preview && theme && <SeasonalDecorations theme={theme} />}
+
       <h1 className="font-display text-2xl font-bold text-cream mb-8">Réglages du site</h1>
 
       {/* Thème saisonnier */}
       <section className="bg-dark-800 border border-cream/5 p-6 mb-6">
         <h2 className="text-sm tracking-widest uppercase text-cream/40 mb-1">Décoration saisonnière</h2>
         <p className="text-cream/50 text-xs mb-5">
-          Ajoute une animation légère sur tout le site selon la saison.
-          Active ou désactive-la en un clic.
+          Habille tout le site aux couleurs de la saison. Clique sur un thème pour le voir
+          immédiatement en aperçu, puis enregistre pour l&apos;appliquer aux visiteurs.
         </p>
 
         <div className="grid grid-cols-3 gap-3 mb-5">
@@ -47,9 +74,10 @@ export default function AdminSettingsPage() {
             <button
               key={label}
               type="button"
-              onClick={() => setTheme(value)}
+              disabled={loading}
+              onClick={() => selectTheme(value)}
               className={clsx(
-                'p-4 border text-left transition-all',
+                'p-4 border text-left transition-all disabled:opacity-40',
                 theme === value
                   ? 'border-wood-400 bg-wood-400/10'
                   : 'border-cream/10 bg-dark-700 hover:border-cream/25'
@@ -63,32 +91,44 @@ export default function AdminSettingsPage() {
         </div>
 
         {theme && (
-          <label className="flex items-center gap-3 cursor-pointer">
-            <div
-              className={clsx(
-                'w-10 h-5 rounded-full transition-colors relative',
-                active ? 'bg-wood-400' : 'bg-cream/10'
-              )}
-              onClick={() => setActive(!active)}
+          <div className="flex flex-wrap items-center gap-6">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <div
+                className={clsx(
+                  'w-10 h-5 rounded-full transition-colors relative',
+                  active ? 'bg-wood-400' : 'bg-cream/10'
+                )}
+                onClick={() => setActive(!active)}
+              >
+                <div className={clsx(
+                  'absolute top-0.5 w-4 h-4 bg-white rounded-full transition-transform',
+                  active ? 'translate-x-5' : 'translate-x-0.5'
+                )} />
+              </div>
+              <span className="text-sm text-cream/60">
+                {active ? 'Visible par les visiteurs' : 'Masqué pour les visiteurs'}
+              </span>
+            </label>
+
+            <button
+              type="button"
+              onClick={() => setPreview(!preview)}
+              className="text-xs tracking-widest uppercase text-cream/50 underline underline-offset-4 hover:text-cream"
             >
-              <div className={clsx(
-                'absolute top-0.5 w-4 h-4 bg-white rounded-full transition-transform',
-                active ? 'translate-x-5' : 'translate-x-0.5'
-              )} />
-            </div>
-            <span className="text-sm text-cream/60">
-              {active ? 'Décoration activée' : 'Décoration désactivée'}
-            </span>
-          </label>
+              {preview ? "Arrêter l'aperçu" : 'Aperçu du décor'}
+            </button>
+          </div>
         )}
       </section>
 
+      {error && <p className="text-sm text-red-400 mb-4">{error}</p>}
+
       <button
         onClick={saveSettings}
-        disabled={saving}
+        disabled={saving || loading}
         className="btn-primary"
       >
-        {saving ? 'Enregistrement…' : saved ? '✓ Enregistré' : 'Enregistrer'}
+        {loading ? 'Chargement…' : saving ? 'Enregistrement…' : saved ? '✓ Enregistré' : 'Enregistrer'}
       </button>
     </div>
   )

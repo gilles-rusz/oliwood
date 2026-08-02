@@ -111,6 +111,9 @@ https://votre-domaine.com/api/webhooks/facebook
 ## 🎄 Décors saisonniers
 
 Dans l'admin → Réglages → Décoration saisonnière :
-- Choisir un thème (Noël ❄, Printemps 🌸)
-- Activer/désactiver en un clic
-- S'applique en temps réel sur tout le site
+- Choisir un thème : **Noël** (guirlande lumineuse, branche de sapin, houx, sapins + Père Noël, neige) ou **Printemps** (cerisiers en fleurs, pétales, prairie fleurie, papillon)
+- Le clic sur un thème affiche un **aperçu immédiat** dans l'admin
+- Le bouton *Visible par les visiteurs* + *Enregistrer* applique le décor sur le site public (les pages statiques sont revalidées automatiquement)
+- Décors allégés sur mobile et désactivés si le visiteur a activé « réduire les animations »
+
+Le code vit dans `src/components/ui/seasonal/` et le CSS dans la section « Décors saisonniers » de `src/app/globals.css`.

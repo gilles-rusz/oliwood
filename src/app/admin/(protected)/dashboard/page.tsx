@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminDashboard() {
   const [totalPhotos, totalDevis, devisNouveaux, lastPhoto, recentDevis] = await Promise.all([
     prisma.realisation.count(),

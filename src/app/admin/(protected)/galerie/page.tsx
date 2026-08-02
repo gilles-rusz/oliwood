@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/prisma'
 import { AdminGalerieClient } from '@/components/admin/AdminGalerieClient'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminGaleriePage() {
   const realisations = await prisma.realisation.findMany({
     orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],

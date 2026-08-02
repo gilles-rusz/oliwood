@@ -18,7 +18,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div style={{ fontFamily: "'Oleo Script', cursive", fontSize: '30px', color: 'var(--jaune)', marginBottom: '12px', lineHeight: 1 }}>
-              Oli'Wood
+              Oli&apos;Wood
             </div>
             <p style={{ fontFamily: "'Khand', sans-serif", fontWeight: 300, fontSize: '16px', lineHeight: 1.6, color: 'var(--gris-clair)', maxWidth: 240 }}>
               Votre spécialiste ossature bois. Carports, pergolas, terrasses et structures sur mesure, fabriqués en France.
@@ -100,7 +100,7 @@ export function Footer() {
           alignItems: 'center', justifyContent: 'space-between', gap: '12px',
         }}>
           <span style={{ fontFamily: "'Khand', sans-serif", fontSize: '14px', color: 'rgba(216,207,200,.5)' }}>
-            © {year} Oli'Wood — SARL au RCS 883 952 681. Tous droits réservés.
+            © {year} Oli&apos;Wood — SARL au RCS 883 952 681. Tous droits réservés.
           </span>
           <span style={{ display: 'flex', gap: '20px' }}>
             {[

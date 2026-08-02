@@ -5,14 +5,21 @@ import { createClient } from '@supabase/supabase-js'
 import { prisma } from '@/lib/prisma'
 import { v4 as uuidv4 } from 'uuid'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function supabaseClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) return null
+  return createClient(url, key)
+}
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
   if (!session) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+
+  const supabase = supabaseClient()
+  if (!supabase) {
+    return NextResponse.json({ error: 'Stockage Supabase non configuré' }, { status: 503 })
+  }
 
   const formData = await req.formData()
   const file     = formData.get('file') as File | null

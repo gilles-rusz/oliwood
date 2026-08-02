@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/prisma'
 import { AdminDevisClient } from '@/components/admin/AdminDevisClient'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminDevisPage() {
   const devis = await prisma.devis.findMany({
     orderBy: { createdAt: 'desc' },

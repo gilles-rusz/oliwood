@@ -78,10 +78,10 @@ passer par le login, `.env.local` doit contenir :
 ADMIN_AUTH_BYPASS="true"
 ```
 
-`/admin/login` redirige alors directement vers le tableau de bord, les routes
-API admin répondent sans session, et un bandeau orange rappelle que le mode est
-actif. Pour revenir à la normale : supprime la ligne, redémarre, puis
-`npm run admin:create`.
+`/admin/login` redirige alors directement vers le tableau de bord et les routes
+API admin répondent sans session. L'interface reste identique à la normale : le
+back-office est filmable pour une démo. Pour revenir à la normale : supprime la
+ligne, redémarre, puis `npm run admin:create`.
 
 Le drapeau est **ignoré dès que `NODE_ENV` vaut `production`** (`npm run build`
 puis `npm start`, Vercel) : le site livré au client reste protégé même si la

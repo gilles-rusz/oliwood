@@ -2,12 +2,13 @@ import { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
+import { adminAuthBypassed } from '@/lib/adminAuthFlag'
 
 // Sans secret stable, NextAuth en dérive un nouveau à chaque redémarrage :
 // les sessions déjà émises deviennent invalides et l'admin est redirigé
 // vers le login en boucle.
 const secret = process.env.NEXTAUTH_SECRET
-if (!secret) {
+if (!secret && !adminAuthBypassed) {
   throw new Error(
     'NEXTAUTH_SECRET manquant. Génère-le avec `openssl rand -base64 32` ' +
     'et ajoute-le dans .env.local, puis redémarre le serveur.'
@@ -65,5 +66,7 @@ export const authOptions: NextAuthOptions = {
       return session
     },
   },
-  secret,
+  // En mode démo (ADMIN_AUTH_BYPASS), personne ne se connecte : un secret
+  // de repli suffit pour que NextAuth s'initialise sans NEXTAUTH_SECRET.
+  secret: secret ?? 'oliwood-demo-bypass-secret',
 }

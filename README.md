@@ -55,6 +55,23 @@ node scripts/checkAdmin.mjs mon@email.fr "monMotDePasse"
 L'email est comparé en minuscules et sans espaces : `Contact@Oliwood.fr` et
 `contact@oliwood.fr` sont le même compte.
 
+### Mode démo : admin sans login
+
+Pour préparer une démo (réglage des décors saisonniers, ajout de photos) sans
+passer par le login, ajoute dans `.env.local` puis redémarre le serveur :
+
+```bash
+ADMIN_AUTH_BYPASS="true"
+```
+
+`/admin/login` redirige alors directement vers le tableau de bord, les routes
+API admin répondent sans session, et un bandeau orange rappelle que le mode est
+actif. Pour revenir à la normale : supprime la ligne et redémarre.
+
+Le drapeau est **ignoré dès que `NODE_ENV` vaut `production`** (`npm run build`
+puis `npm start`, Vercel) : le site livré au client reste protégé même si la
+variable traîne dans l'environnement.
+
 ---
 
 ## 📁 Structure du projet

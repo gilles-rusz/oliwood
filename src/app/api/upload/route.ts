@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { isAdminAuthorized } from '@/lib/adminSession'
 import { createClient } from '@supabase/supabase-js'
 import { prisma } from '@/lib/prisma'
 import { v4 as uuidv4 } from 'uuid'
@@ -13,8 +12,9 @@ function supabaseClient() {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions)
-  if (!session) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+  if (!await isAdminAuthorized()) {
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+  }
 
   const supabase = supabaseClient()
   if (!supabase) {

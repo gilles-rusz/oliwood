@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: oliwood
+      POSTGRES_PASSWORD: oliwood
+      POSTGRES_DB: oliwood
+    ports:
+      - "5432:5432"
+    volumes:
+      - oliwood_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U oliwood -d oliwood"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  oliwood_postgres:

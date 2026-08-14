@@ -6,28 +6,40 @@ Stack : **Next.js 14** · **Supabase** · **Prisma** · **NextAuth** · **Tailwi
 
 ## 🚀 Installation rapide
 
+### Développement local (sans Supabase)
+
+Docker Desktop doit être installé et démarré.
+
 ```bash
-# 1. Installer les dépendances
 npm install
-
-# 2. Copier le fichier d'environnement
-cp .env.example .env.local
-# → Remplir toutes les variables dans .env.local
-
-# 3. Générer le client Prisma
-npm run db:generate
-
-# 4. Pousser le schéma vers Supabase
-npm run db:push
-
-# 5. Créer le compte admin (email + mot de passe, stockés en base)
-npm run admin:create
-
-# 6. Lancer en développement
+npm run setup:local
 npm run dev
 ```
 
-Ouvrir [http://localhost:3000](http://localhost:3000), admin sur [/admin/login](http://localhost:3000/admin/login).
+`setup:local` écrit `.env` et `.env.local` (base locale, `NEXTAUTH_SECRET`,
+`ADMIN_AUTH_BYPASS`), démarre PostgreSQL dans Docker et crée les tables. Toute
+valeur d'exemple encore présente (`postgresql://user:password@host:port/db`,
+`generer_avec_...`) est remplacée ; le fichier d'origine est sauvegardé en
+`.env.local.bak`.
+
+Ouvrir [http://localhost:3000](http://localhost:3000) : le bouton « admin » en
+bas de page mène directement au back-office, sans login (mode démo, voir plus
+bas). Pour arrêter la base locale :
+
+```bash
+npm run db:local:stop
+```
+
+### Connexion à Supabase
+
+```bash
+cp .env.example .env.local
+# Remplir les variables Supabase et PostgreSQL
+npm run db:generate
+npm run db:push
+npm run admin:create
+npm run dev
+```
 
 ---
 
@@ -35,7 +47,8 @@ Ouvrir [http://localhost:3000](http://localhost:3000), admin sur [/admin/login](
 
 Le compte admin vit dans la table `Admin` de la base, jamais dans `.env.local`.
 Un seul compte suffit : `npm run admin:create` avec un email déjà existant
-**remplace simplement son mot de passe**.
+**remplace simplement son mot de passe** (l'ancien est irrécupérable, il n'est
+stocké qu'en hash bcrypt).
 
 ```bash
 # Diagnostic complet : variables d'env, base, comptes existants
@@ -47,6 +60,7 @@ node scripts/checkAdmin.mjs mon@email.fr "monMotDePasse"
 
 | Symptôme | Cause | Correctif |
 |---|---|---|
+| `Invalid prisma....invocation` / « invalid port number » | `DATABASE_URL` encore à la valeur d'exemple | `npm run setup:local` (base locale) ou coller la vraie chaîne Supabase |
 | Login accepté puis retour immédiat sur `/admin/login` | `NEXTAUTH_SECRET` absent ou modifié : le cookie de session ne peut plus être relu | Définir un `NEXTAUTH_SECRET` fixe (`openssl rand -base64 32`) dans `.env.local` et redémarrer |
 | Reconnexion demandée à chaque redémarrage de `npm run dev` | idem | idem |
 | « Email ou mot de passe incorrect » | Aucun admin en base, email saisi différent, ou mot de passe écrit dans une autre base | `npm run admin:check` puis `npm run admin:create` |
@@ -58,7 +72,7 @@ L'email est comparé en minuscules et sans espaces : `Contact@Oliwood.fr` et
 ### Mode démo : admin sans login
 
 Pour préparer une démo (réglage des décors saisonniers, ajout de photos) sans
-passer par le login, ajoute dans `.env.local` puis redémarre le serveur :
+passer par le login, `.env.local` doit contenir :
 
 ```bash
 ADMIN_AUTH_BYPASS="true"
@@ -66,7 +80,8 @@ ADMIN_AUTH_BYPASS="true"
 
 `/admin/login` redirige alors directement vers le tableau de bord, les routes
 API admin répondent sans session, et un bandeau orange rappelle que le mode est
-actif. Pour revenir à la normale : supprime la ligne et redémarre.
+actif. Pour revenir à la normale : supprime la ligne, redémarre, puis
+`npm run admin:create`.
 
 Le drapeau est **ignoré dès que `NODE_ENV` vaut `production`** (`npm run build`
 puis `npm start`, Vercel) : le site livré au client reste protégé même si la

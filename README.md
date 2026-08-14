@@ -20,14 +20,40 @@ npm run db:generate
 # 4. Pousser le schéma vers Supabase
 npm run db:push
 
-# 5. Créer le compte admin
-node scripts/createAdmin.mjs
+# 5. Créer le compte admin (email + mot de passe, stockés en base)
+npm run admin:create
 
 # 6. Lancer en développement
 npm run dev
 ```
 
-Ouvrir [http://localhost:3000](http://localhost:3000)
+Ouvrir [http://localhost:3000](http://localhost:3000), admin sur [/admin/login](http://localhost:3000/admin/login).
+
+---
+
+## 🔑 Connexion admin : dépannage
+
+Le compte admin vit dans la table `Admin` de la base, jamais dans `.env.local`.
+Un seul compte suffit : `npm run admin:create` avec un email déjà existant
+**remplace simplement son mot de passe**.
+
+```bash
+# Diagnostic complet : variables d'env, base, comptes existants
+npm run admin:check
+
+# Vérifier un couple email / mot de passe précis
+node scripts/checkAdmin.mjs mon@email.fr "monMotDePasse"
+```
+
+| Symptôme | Cause | Correctif |
+|---|---|---|
+| Login accepté puis retour immédiat sur `/admin/login` | `NEXTAUTH_SECRET` absent ou modifié : le cookie de session ne peut plus être relu | Définir un `NEXTAUTH_SECRET` fixe (`openssl rand -base64 32`) dans `.env.local` et redémarrer |
+| Reconnexion demandée à chaque redémarrage de `npm run dev` | idem | idem |
+| « Email ou mot de passe incorrect » | Aucun admin en base, email saisi différent, ou mot de passe écrit dans une autre base | `npm run admin:check` puis `npm run admin:create` |
+| Login qui échoue après changement de port | `NEXTAUTH_URL` ne correspond plus au port réel | Aligner `NEXTAUTH_URL` sur l'URL de `npm run dev` |
+
+L'email est comparé en minuscules et sans espaces : `Contact@Oliwood.fr` et
+`contact@oliwood.fr` sont le même compte.
 
 ---
 
@@ -74,7 +100,7 @@ src/
 | **reCAPTCHA v3** | Score < 0.5 → requête rejetée |
 | **Rate limiting** | 5 requêtes / 15 min par IP sur `/api/contact` |
 | **Headers HTTP** | CSP, X-Frame-Options, HSTS via `next.config.js` |
-| **Auth admin** | JWT NextAuth, session 8h, bcrypt sur le mot de passe |
+| **Auth admin** | JWT NextAuth, session 8h, bcrypt (coût 12) sur le mot de passe, minimum 12 caractères |
 | **Middleware** | Toutes les routes `/admin/*` vérifiées côté serveur |
 | **Upload** | Vérification MIME + taille max 10 Mo |
 

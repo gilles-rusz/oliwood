@@ -20,12 +20,16 @@ export default function AdminLoginPage() {
       email, password, redirect: false,
     })
 
-    if (res?.ok) {
-      router.push('/admin/dashboard')
-    } else {
+    // NextAuth renvoie parfois ok: true avec une erreur de credentials :
+    // c'est `error` qui fait foi.
+    if (res?.error) {
       setError('Email ou mot de passe incorrect.')
+      setLoading(false)
+      return
     }
-    setLoading(false)
+
+    router.replace('/admin/dashboard')
+    router.refresh()
   }
 
   return (

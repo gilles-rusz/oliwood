@@ -54,8 +54,11 @@ function writeEnv(file, secret) {
   const before = lines.join('\n')
   if (existsSync(file)) copyFileSync(file, `${file}.bak`)
 
-  upsert(lines, 'DATABASE_URL', LOCAL_DB)
-  upsert(lines, 'DIRECT_URL', LOCAL_DB)
+  // La base est imposée dans les deux fichiers : si `.env` gardait une URL
+  // Supabase valide, `prisma db push` créerait les tables ailleurs que là où
+  // Next les lit (`.env.local` a la priorité) — donc « table does not exist ».
+  upsert(lines, 'DATABASE_URL', LOCAL_DB, { onlyIfPlaceholder: false })
+  upsert(lines, 'DIRECT_URL', LOCAL_DB, { onlyIfPlaceholder: false })
   upsert(lines, 'NEXTAUTH_SECRET', secret)
   upsert(lines, 'NEXTAUTH_URL', 'http://localhost:3000')
   upsert(lines, 'ADMIN_AUTH_BYPASS', 'true', { onlyIfPlaceholder: false })
@@ -75,6 +78,10 @@ writeEnv('.env', secret)
 writeEnv('.env.local', secret)
 
 run('docker', ['compose', 'up', '-d', '--wait', 'postgres'])
+// Les variables du process gagnent sur les fichiers : les tables sont créées
+// dans la base locale, quoi que contiennent .env / .env.local.
+process.env.DATABASE_URL = LOCAL_DB
+process.env.DIRECT_URL = LOCAL_DB
 run('npx', ['prisma', 'db', 'push'])
 
 console.log('\nOliWood est prêt : lance `npm run dev`, puis http://localhost:3000')

@@ -2,6 +2,18 @@ import { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
+import { adminAuthBypassed } from '@/lib/adminAuthFlag'
+
+// Sans secret stable, NextAuth en dérive un nouveau à chaque redémarrage :
+// les sessions déjà émises deviennent invalides et l'admin est redirigé
+// vers le login en boucle.
+const secret = process.env.NEXTAUTH_SECRET
+if (!secret && !adminAuthBypassed) {
+  throw new Error(
+    'NEXTAUTH_SECRET manquant. Génère-le avec `openssl rand -base64 32` ' +
+    'et ajoute-le dans .env.local, puis redémarre le serveur.'
+  )
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -17,10 +29,20 @@ export const authOptions: NextAuthOptions = {
         const admin = await prisma.admin.findUnique({
           where: { email: credentials.email.toLowerCase().trim() },
         })
-        if (!admin) return null
+        if (!admin) {
+          if (process.env.NODE_ENV !== 'production') {
+            console.warn(`[auth] aucun admin pour ${credentials.email}. Lance \`node scripts/checkAdmin.mjs\`.`)
+          }
+          return null
+        }
 
         const valid = await bcrypt.compare(credentials.password, admin.password)
-        if (!valid) return null
+        if (!valid) {
+          if (process.env.NODE_ENV !== 'production') {
+            console.warn(`[auth] mot de passe invalide pour ${admin.email}.`)
+          }
+          return null
+        }
 
         return { id: admin.id, email: admin.email }
       },
@@ -28,7 +50,7 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt',
-    maxAge:   8 * 60 * 60, // 8h
+    maxAge:   30 * 24 * 60 * 60, // 30 jours
   },
   pages: {
     signIn:  '/admin/login',
@@ -44,5 +66,7 @@ export const authOptions: NextAuthOptions = {
       return session
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  // En mode démo (ADMIN_AUTH_BYPASS), personne ne se connecte : un secret
+  // de repli suffit pour que NextAuth s'initialise sans NEXTAUTH_SECRET.
+  secret: secret ?? 'oliwood-demo-bypass-secret',
 }

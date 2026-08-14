@@ -36,6 +36,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html[data-season='noel'] body {
+  background-image: url('/images/texture-bois-noel.jpg');
+}
+
 ::-webkit-scrollbar        { width: 6px; }
 ::-webkit-scrollbar-track  { background: var(--brun-fonce); }
 ::-webkit-scrollbar-thumb  { background: var(--jaune); border-radius: 3px; }

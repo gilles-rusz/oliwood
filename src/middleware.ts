@@ -1,9 +1,18 @@
 import { NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 import type { NextRequest } from 'next/server'
+import { adminAuthBypassed } from '@/lib/adminAuthFlag'
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
+
+  // Mode démo local : l'admin est ouvert et le login n'a plus d'objet.
+  if (adminAuthBypassed) {
+    if (pathname === '/admin/login') {
+      return NextResponse.redirect(new URL('/admin/dashboard', req.url))
+    }
+    return NextResponse.next()
+  }
 
   // /admin/login et /api/auth/* sont toujours exclus de la protection
   // (le matcher ci-dessous ne couvre déjà que /admin/*, cette garde est

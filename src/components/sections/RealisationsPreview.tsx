@@ -5,14 +5,14 @@ import type { Realisation } from '@prisma/client'
 interface Card {
   title: string
   img: string
-  fit?: 'cover' | 'contain'
+  position?: string
 }
 
 const PLACEHOLDERS: Card[] = [
   { title: 'Carport',  img: '/images/carport.jpg' },
   { title: 'Pergola',  img: '/images/pergola.jpg' },
   { title: 'Terrasse', img: '/images/terrasse.jpg' },
-  { title: 'Et autres, selon vos envies', img: '/images/autres.jpg', fit: 'contain' },
+  { title: 'Et autres, selon vos envies', img: '/images/autres.jpg', position: '14% center' },
 ]
 
 interface Props { realisations: Realisation[] }
@@ -47,13 +47,14 @@ export function RealisationsPreview({ realisations }: Props) {
 
         <div className="cards-2x2">
           {cards.map(c => (
-            <Link
-              key={c.title}
-              href="/realisations"
-              className={c.fit === 'contain' ? 'card-photo card-photo-affiche' : 'card-photo'}
-            >
+            <Link key={c.title} href="/realisations" className="card-photo">
               {c.img ? (
-                <Image src={c.img} alt={c.title} fill style={{ objectFit: c.fit ?? 'cover' }} />
+                <Image
+                  src={c.img}
+                  alt={c.title}
+                  fill
+                  style={{ objectFit: 'cover', objectPosition: c.position ?? 'center' }}
+                />
               ) : (
                 <div className="card-photo-empty" />
               )}

@@ -41,11 +41,7 @@ export function RealisationsPreview({ realisations }: Props) {
           </p>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(290px, 100%), 1fr))',
-          gap: '24px',
-        }}>
+        <div className="cards-2x2">
           {cards.map(c => (
             <Link key={c.title} href="/realisations" style={{
               display: 'block', borderRadius: '16px', overflow: 'hidden',
@@ -55,7 +51,7 @@ export function RealisationsPreview({ realisations }: Props) {
               transition: 'transform .25s, box-shadow .25s',
             }}>
               {/* Photo */}
-              <div style={{ height: 220, background: 'var(--brun)', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ height: 250, background: 'var(--brun)', position: 'relative', overflow: 'hidden' }}>
                 {c.img ? (
                   <Image src={c.img} alt={c.title} fill style={{ objectFit: 'cover' }} />
                 ) : (

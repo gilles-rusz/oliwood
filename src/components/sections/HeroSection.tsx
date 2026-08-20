@@ -35,7 +35,9 @@ export function HeroSection({ noel = false }: { noel?: boolean }) {
 
       {/* ── Logo Oli'Wood, centré en haut ── */}
       <div className="hero-logo" aria-hidden>
-        <LogoImage width={150} height={150} alt="" style={{ width: '100%', height: 'auto', display: 'block' }} />
+        <div className="hero-logo-roll">
+          <LogoImage width={260} height={260} alt="" style={{ width: '100%', height: 'auto', display: 'block' }} />
+        </div>
       </div>
 
       {/* ── Badge Made in Jura, en haut à droite ── */}
@@ -109,14 +111,16 @@ export function HeroSection({ noel = false }: { noel?: boolean }) {
       <style jsx>{`
         .hero-logo {
           position: absolute;
-          top: clamp(84px, 11vh, 118px);
+          top: clamp(76px, 10vh, 112px);
           left: 50%;
           z-index: 12;
-          width: clamp(104px, 13vw, 172px);
+          width: clamp(150px, 18vw, 250px);
           transform: translateX(-50%);
-          filter: drop-shadow(0 10px 22px rgba(0, 0, 0, .45));
-          animation: logoDrop 1s cubic-bezier(.2, .8, .3, 1) .25s both,
-                     logoFloat 6s ease-in-out 1.4s infinite;
+          filter: drop-shadow(0 12px 26px rgba(0, 0, 0, .5));
+          animation: logoBounce 1.7s cubic-bezier(.4, 0, .6, 1) .2s both;
+        }
+        .hero-logo-roll {
+          animation: logoRoll 1.7s cubic-bezier(.25, .6, .3, 1) .2s both;
         }
         .hero-jura {
           position: absolute;
@@ -130,31 +134,37 @@ export function HeroSection({ noel = false }: { noel?: boolean }) {
           background: var(--creme);
           border: 2px solid var(--jaune);
           box-shadow: 0 8px 20px rgba(0, 0, 0, .4);
-          animation: juraWiggle 5s ease-in-out 1.8s infinite;
+          animation: juraWiggle 2.6s ease-in-out 2s infinite;
           transition: transform .25s;
         }
         .hero-jura:hover {
           transform: scale(1.08) rotate(0deg);
           animation-play-state: paused;
         }
-        @keyframes logoDrop {
-          from { opacity: 0; transform: translateX(-50%) translateY(-40px) rotate(-25deg) scale(.7); }
-          to   { opacity: 1; transform: translateX(-50%) translateY(0) rotate(0) scale(1); }
+        @keyframes logoBounce {
+          0%   { opacity: 0; transform: translateX(-50%) translateY(-70vh); }
+          8%   { opacity: 1; }
+          38%  { transform: translateX(-50%) translateY(0); animation-timing-function: ease-out; }
+          56%  { transform: translateX(-50%) translateY(-90px); animation-timing-function: ease-in; }
+          72%  { transform: translateX(-50%) translateY(0); animation-timing-function: ease-out; }
+          85%  { transform: translateX(-50%) translateY(-30px); animation-timing-function: ease-in; }
+          96%  { transform: translateX(-50%) translateY(0); }
+          100% { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
-        @keyframes logoFloat {
-          0%, 100% { transform: translateX(-50%) translateY(0); }
-          50%      { transform: translateX(-50%) translateY(-8px); }
+        @keyframes logoRoll {
+          0%   { transform: rotate(-720deg); }
+          100% { transform: rotate(0deg); }
         }
         @keyframes juraWiggle {
-          0%, 62%, 100%       { transform: rotate(0deg) scale(1); }
-          66%                 { transform: rotate(-7deg) scale(1.06); }
-          70%                 { transform: rotate(6deg) scale(1.06); }
-          74%                 { transform: rotate(-5deg) scale(1.05); }
-          78%                 { transform: rotate(4deg) scale(1.04); }
-          82%                 { transform: rotate(-2deg) scale(1.02); }
+          0%, 58%, 100%       { transform: rotate(0deg) scale(1); }
+          63%                 { transform: rotate(-9deg) scale(1.09); }
+          68%                 { transform: rotate(8deg) scale(1.09); }
+          73%                 { transform: rotate(-7deg) scale(1.07); }
+          78%                 { transform: rotate(6deg) scale(1.05); }
+          85%                 { transform: rotate(-3deg) scale(1.03); }
         }
         @media (prefers-reduced-motion: reduce) {
-          .hero-logo, .hero-jura { animation: none; }
+          .hero-logo, .hero-logo-roll, .hero-jura { animation: none; }
         }
         .hero-content-wrap {
           opacity: 0;

@@ -227,6 +227,18 @@ html[data-season='noel'] body {
   50%      { opacity: .35; }
 }
 
+/* Aperçu réalisations : 4 cartes en 2x2, centrées */
+.cards-2x2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+@media (max-width: 720px) {
+  .cards-2x2 { grid-template-columns: 1fr; max-width: 440px; }
+}
+
 .xmas-img { display: block; width: 100%; height: auto; filter: drop-shadow(0 6px 14px rgba(0,0,0,.4)); }
 
 .xmas-houx-tl { top: 30px; left: 0;  width: clamp(110px, 13vw, 190px); }

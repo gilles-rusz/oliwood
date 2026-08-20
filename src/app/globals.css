@@ -255,6 +255,11 @@ html[data-season='noel'] body {
 .card-photo:hover { transform: translateY(-4px); box-shadow: 0 18px 34px rgba(0, 0, 0, .45); }
 .card-photo:hover img { transform: scale(1.06); }
 
+.card-photo-affiche { background: #f4ece0; }
+.card-photo-affiche .card-photo-meta {
+  background: linear-gradient(to top, rgba(0,0,0,.78) 0%, rgba(0,0,0,.35) 60%, transparent 100%);
+}
+
 .card-photo-empty {
   position: absolute;
   inset: 0;
@@ -297,7 +302,6 @@ html[data-season='noel'] body {
 /* Le houx occupe l'angle : le badge Made in Jura descend sous la branche */
 html[data-season='noel'] .hero-jura { top: clamp(200px, 26vh, 260px); }
 
-.xmas-sapin  { bottom: 0; left: 8px;   width: clamp(90px, 10vw, 150px); }
 .xmas-boules { bottom: 0; right: -10px; width: clamp(120px, 14vw, 200px); }
 
 /* ── Printemps ── */
@@ -334,7 +338,7 @@ html[data-season='noel'] .hero-jura { top: clamp(200px, 26vh, 260px); }
 
 /* ── Mobile : on allège ── */
 @media (max-width: 767px) {
-  .xmas-houx-tr, .xmas-sapin,
+  .xmas-houx-tr,
   .spring-branch-tr, .spring-meadow-br, .spring-butterfly {
     display: none;
   }

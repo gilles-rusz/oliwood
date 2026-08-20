@@ -2,17 +2,23 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Realisation } from '@prisma/client'
 
-const PLACEHOLDERS = [
+interface Card {
+  title: string
+  img: string
+  fit?: 'cover' | 'contain'
+}
+
+const PLACEHOLDERS: Card[] = [
   { title: 'Carport',  img: '/images/carport.jpg' },
   { title: 'Pergola',  img: '/images/pergola.jpg' },
   { title: 'Terrasse', img: '/images/terrasse.jpg' },
-  { title: 'Et autres, selon vos envies', img: '/images/autres.jpg' },
+  { title: 'Et autres, selon vos envies', img: '/images/autres.jpg', fit: 'contain' },
 ]
 
 interface Props { realisations: Realisation[] }
 
 export function RealisationsPreview({ realisations }: Props) {
-  const cards = realisations.length > 0
+  const cards: Card[] = realisations.length > 0
     ? realisations.slice(0, 4).map(r => ({
         title: r.title,
         img:   r.thumbUrl || r.imageUrl,
@@ -41,9 +47,13 @@ export function RealisationsPreview({ realisations }: Props) {
 
         <div className="cards-2x2">
           {cards.map(c => (
-            <Link key={c.title} href="/realisations" className="card-photo">
+            <Link
+              key={c.title}
+              href="/realisations"
+              className={c.fit === 'contain' ? 'card-photo card-photo-affiche' : 'card-photo'}
+            >
               {c.img ? (
-                <Image src={c.img} alt={c.title} fill style={{ objectFit: 'cover' }} />
+                <Image src={c.img} alt={c.title} fill style={{ objectFit: c.fit ?? 'cover' }} />
               ) : (
                 <div className="card-photo-empty" />
               )}

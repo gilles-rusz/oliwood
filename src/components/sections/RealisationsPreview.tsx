@@ -3,10 +3,10 @@ import Image from 'next/image'
 import type { Realisation } from '@prisma/client'
 
 const PLACEHOLDERS = [
-  { tag: 'Carport',  title: 'Carport',  desc: '', img: '/images/carport.jpg' },
-  { tag: 'Pergola',  title: 'Pergola',  desc: '', img: '/images/pergola.jpg' },
-  { tag: 'Terrasse', title: 'Terrasse', desc: '', img: '/images/terrasse.jpg' },
-  { tag: 'Sur mesure', title: 'Et autres en fonction de vos envies', desc: '', img: '/images/autres.jpg' },
+  { title: 'Carport',  img: '/images/carport.jpg' },
+  { title: 'Pergola',  img: '/images/pergola.jpg' },
+  { title: 'Terrasse', img: '/images/terrasse.jpg' },
+  { title: 'Et autres, selon vos envies', img: '/images/autres.jpg' },
 ]
 
 interface Props { realisations: Realisation[] }
@@ -14,9 +14,7 @@ interface Props { realisations: Realisation[] }
 export function RealisationsPreview({ realisations }: Props) {
   const cards = realisations.length > 0
     ? realisations.slice(0, 4).map(r => ({
-        tag:   r.category ?? '',
         title: r.title,
-        desc:  '',
         img:   r.thumbUrl || r.imageUrl,
       }))
     : PLACEHOLDERS
@@ -43,53 +41,14 @@ export function RealisationsPreview({ realisations }: Props) {
 
         <div className="cards-2x2">
           {cards.map(c => (
-            <Link key={c.title} href="/realisations" style={{
-              display: 'block', borderRadius: '16px', overflow: 'hidden',
-              background: '#fff', textDecoration: 'none',
-              border: '3px solid var(--brun)',
-              boxShadow: 'var(--ombre)',
-              transition: 'transform .25s, box-shadow .25s',
-            }}>
-              {/* Photo */}
-              <div style={{ height: 250, background: 'var(--brun)', position: 'relative', overflow: 'hidden' }}>
-                {c.img ? (
-                  <Image src={c.img} alt={c.title} fill style={{ objectFit: 'cover' }} />
-                ) : (
-                  <div style={{
-                    height: '100%', display: 'grid', placeItems: 'center',
-                    backgroundImage: 'repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0 4px,transparent 4px 20px)',
-                  }}>
-                    <span style={{
-                      fontFamily: "'Khand', sans-serif",
-                      color: 'rgba(255,255,255,.5)',
-                      textTransform: 'uppercase', letterSpacing: 2, fontSize: 13,
-                      background: 'rgba(0,0,0,.3)', padding: '5px 14px', borderRadius: 20,
-                    }}>
-                      Photo {c.tag.toLowerCase()}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Méta */}
-              <div style={{ padding: '18px 22px', borderTop: '3px solid var(--jaune)' }}>
-                <span style={{
-                  display: 'inline-block',
-                  background: 'var(--jaune)', color: 'var(--brun-fonce)',
-                  fontFamily: "'Khand', sans-serif",
-                  fontSize: 13, fontWeight: 600, textTransform: 'uppercase',
-                  letterSpacing: 1, padding: '3px 12px', borderRadius: 20, marginBottom: 10,
-                }}>
-                  {c.tag}
-                </span>
-                <h3 style={{ fontFamily: "'Oleo Script', cursive", fontSize: '22px', color: 'var(--brun)', marginBottom: 6 }}>
-                  {c.title}
-                </h3>
-                {c.desc && (
-                  <p style={{ fontFamily: "'Khand', sans-serif", fontSize: 15, fontWeight: 300, color: 'var(--taupe)' }}>
-                    {c.desc}
-                  </p>
-                )}
+            <Link key={c.title} href="/realisations" className="card-photo">
+              {c.img ? (
+                <Image src={c.img} alt={c.title} fill style={{ objectFit: 'cover' }} />
+              ) : (
+                <div className="card-photo-empty" />
+              )}
+              <div className="card-photo-meta">
+                <h3>{c.title}</h3>
               </div>
             </Link>
           ))}

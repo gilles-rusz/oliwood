@@ -3,16 +3,17 @@ import Image from 'next/image'
 import type { Realisation } from '@prisma/client'
 
 const PLACEHOLDERS = [
-  { tag: 'Carport',  title: 'Carport bois massif',    desc: '', img: '/images/carport.jpg' },
-  { tag: 'Pergola',  title: 'Pergola bioclimatique',  desc: '', img: '/images/pergola.jpg' },
-  { tag: 'Terrasse', title: 'Terrasse sur pilotis',   desc: '', img: '/images/terrasse.jpg' },
+  { tag: 'Carport',  title: 'Carport',  desc: '', img: '/images/carport.jpg' },
+  { tag: 'Pergola',  title: 'Pergola',  desc: '', img: '/images/pergola.jpg' },
+  { tag: 'Terrasse', title: 'Terrasse', desc: '', img: '/images/terrasse.jpg' },
+  { tag: 'Sur mesure', title: 'Et autres en fonction de vos envies', desc: '', img: '/images/autres.jpg' },
 ]
 
 interface Props { realisations: Realisation[] }
 
 export function RealisationsPreview({ realisations }: Props) {
   const cards = realisations.length > 0
-    ? realisations.slice(0, 3).map(r => ({
+    ? realisations.slice(0, 4).map(r => ({
         tag:   r.category ?? '',
         title: r.title,
         desc:  '',
@@ -24,7 +25,7 @@ export function RealisationsPreview({ realisations }: Props) {
     <section style={{ background: 'transparent', padding: '80px 0' }}>
       <div className="wrap">
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <span className="eyebrow" style={{ color: 'var(--jaune)' }}>Nos derniers chantiers</span>
+          <span className="eyebrow" style={{ color: 'var(--jaune)' }}>Mes derniers chantiers</span>
           <h2 style={{
             fontFamily: "'Oleo Script', cursive",
             fontSize: 'clamp(30px,4.5vw,52px)',
@@ -36,7 +37,7 @@ export function RealisationsPreview({ realisations }: Props) {
             fontFamily: "'Khand', sans-serif",
             fontSize: '19px', color: 'rgba(255,255,255,.92)', fontWeight: 300,
           }}>
-            Un aperçu de nos projets ossature bois.
+            Un aperçu de mes projets bois.
           </p>
         </div>
 
@@ -99,7 +100,7 @@ export function RealisationsPreview({ realisations }: Props) {
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '44px' }}>
-          <Link href="/realisations" className="btn-primary-ow">Toutes nos réalisations</Link>
+          <Link href="/realisations" className="btn-primary-ow">Toutes mes réalisations</Link>
         </div>
       </div>
     </section>

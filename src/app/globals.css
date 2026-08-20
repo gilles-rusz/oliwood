@@ -232,6 +232,9 @@ html[data-season='noel'] body {
 .xmas-houx-tl { top: 30px; left: 0;  width: clamp(110px, 13vw, 190px); }
 .xmas-houx-tr { top: 30px; right: 0; width: clamp(110px, 13vw, 190px); transform: scaleX(-1); }
 
+/* Le houx occupe l'angle : le badge Made in Jura descend sous la branche */
+html[data-season='noel'] .hero-jura { top: clamp(200px, 26vh, 260px); }
+
 .xmas-sapin  { bottom: 0; left: 8px;   width: clamp(90px, 10vw, 150px); }
 .xmas-boules { bottom: 0; right: -10px; width: clamp(120px, 14vw, 200px); }
 

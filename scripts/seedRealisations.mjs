@@ -78,6 +78,38 @@ const CARPORT_TITLES = [
   'Carport double avec claustra en enfilade',
 ]
 
+const AUTRE_TITLES = [
+  'Avant / Après — terrasse bois sur dalle béton',
+  'Avant / Après — carport fermé et aménagé',
+  'Avant / Après — claustras brise-vue de cour',
+  'Avant / Après — bardage ravivé et lasuré',
+  'Avant / Après — habillage bois de soubassement',
+  'Portail bois laqué rouge',
+  'Pool house avec charpente apparente éclairée',
+  'Pool house en bois sur mesure',
+  'Pont de jardin en bois',
+  'Passerelle de bassin en bois',
+  'Auvent de porte en douglas',
+  'Abri à toit plat avec polycarbonate',
+  'Abri de jardin quatre pans',
+  'Garde-corps bois et verre',
+  'Bardage de chalet en bois',
+  'Garde-corps verre sur terrasse panoramique',
+  'Abri bois bardé sur mesure',
+  'Terrasse de piscine et garde-corps verre',
+  'Terrasse et claustra brise-vue en douglas',
+  'Claustra bas de jardin',
+  'Abri de jardin avec bûcher',
+  'Clôture bois à lames horizontales',
+  'Auvent de garage contemporain',
+  'Claustras brise-vue devant carport',
+  'Habillage bois de façade enterrée',
+  'Charpente apparente en douglas',
+  'Local à vélos fermé en bois',
+  'Abri public couvert avec bancs',
+  'Abri pour moutons en bois',
+]
+
 function catalogue(slug, category, titles) {
   return titles.map((title, i) => {
     const n = String(i + 1).padStart(2, '0')
@@ -95,6 +127,7 @@ const REALISATIONS = [
   ...catalogue('terrasse', 'TERRASSE', TERRASSE_TITLES),
   ...catalogue('pergola', 'PERGOLA', PERGOLA_TITLES),
   ...catalogue('carport', 'CARPORT', CARPORT_TITLES),
+  ...catalogue('autre', 'AUTRE', AUTRE_TITLES),
 ]
 
 let created = 0

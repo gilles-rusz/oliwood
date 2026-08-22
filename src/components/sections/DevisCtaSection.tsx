@@ -23,7 +23,7 @@ export function DevisCtaSection() {
           maxWidth: 560, margin: '0 auto 34px',
           lineHeight: 1.55, color: 'var(--creme)',
         }}>
-          Devis gratuit, sans engagement. Déplacement inclus. Réponse sous 48h — intervention dans tout le Jura.
+          Devis gratuit, sans engagement. Déplacement envisagé après échange par email ou téléphone.
         </p>
         <Link href="/devis" className="btn-primary-ow">Démarrer mon devis</Link>
       </div>

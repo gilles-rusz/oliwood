@@ -59,9 +59,6 @@ export function ChristmasDecor() {
       <div className="seasonal-corner xmas-houx-tr" aria-hidden>
         <Image src="/images/noel/houx.png" alt="" width={560} height={601} className="xmas-img" />
       </div>
-      <div className="seasonal-corner xmas-sapin" aria-hidden>
-        <Image src="/images/noel/sapin.png" alt="" width={512} height={760} className="xmas-img" />
-      </div>
       <div className="seasonal-corner xmas-boules" aria-hidden>
         <Image src="/images/noel/boules.png" alt="" width={520} height={322} className="xmas-img" />
       </div>

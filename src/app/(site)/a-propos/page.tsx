@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'À propos',
-  description: 'Découvrez l\'histoire et les valeurs d\'Oli\'Wood, menuiserie artisanale implantée dans le Jura.',
+  description: 'Passionné par le bois depuis toujours, je conçois et construis vos projets en ossature bois depuis mon atelier du Jura.',
 }
 
 export default function AProposPage() {
@@ -26,24 +26,33 @@ export default function AProposPage() {
           lineHeight: 1.15,
           marginBottom: '32px',
         }}>
-          Notre histoire
+          Mon histoire
         </h1>
 
-        <div style={{
+        <div className="paper-card" style={{
           fontFamily: "'Khand', sans-serif",
-          fontSize: '20px', fontWeight: 300,
-          color: 'var(--creme)',
+          fontSize: '20px', fontWeight: 400,
+          color: '#53341a',
           lineHeight: 1.7,
           display: 'flex', flexDirection: 'column', gap: '20px',
         }}>
           <p>
-            Tout a commencé dans le garage de sa maman, à Phalsbourg. Olivier, seul avec ses outils et sa passion du bois, posait les premières pièces de ce qui allait devenir bien plus qu&apos;une petite entreprise. Pas de grande structure, pas d&apos;investisseurs — juste un artisan déterminé, une scie, et l&apos;envie de bien faire.
+            Passionné par le bois depuis mon plus jeune âge, c&apos;est avec mes premiers ciseaux à bois que j&apos;ai commencé à donner vie à mes premières créations, directement dans la cave de mes parents. Après l&apos;obtention de mes diplômes, je choisis naturellement de faire de cette passion mon métier. En 2011, je me lance comme artisan indépendant et développe mon activité autour de la menuiserie et de l&apos;agencement intérieur.
           </p>
           <p>
-            Au fil des chantiers et des clients conquis, la petite structure a grandi. Olivier a pu quitter le garage familial pour acquérir son propre atelier — un grand espace où il pouvait enfin donner libre cours à ses créations, prendre des projets d&apos;envergure et constituer sa première vraie clientèle.
+            Au fil des années, l&apos;entreprise grandit et les projets se diversifient : aménagements sur mesure, pergolas, kiosques… Ces réalisations me permettent de renouer avec ce qui m&apos;anime depuis toujours : la conception et la construction de structures en ossature bois.
           </p>
           <p>
-            Puis est venu le Jura. Ce déménagement dans les montagnes du 39 marquait une nouvelle étape : c&apos;est ici, à Moirans-en-Montagne, qu&apos;est née Oli&apos;Wood. Une nouvelle identité, un nouveau territoire, mais le même ADN — un artisan passionné, une équipe soudée, zéro sous-traitance, et depuis une quinzaine d&apos;années maintenant, plus de 200 projets réalisés pour des clients qui voulaient du bois bien travaillé, sur-mesure, et pensé pour durer.
+            C&apos;est ainsi qu&apos;en 2020 naît Oli&apos;Wood. Un nouveau nom, un nouveau statut et surtout une volonté affirmée de recentrer mon savoir-faire sur mon cœur de métier : l&apos;ossature bois et les constructions extérieures.
+          </p>
+          <p>
+            Fort de plus de 20 ans d&apos;expérience dans le travail du bois, je mets aujourd&apos;hui cette expertise au service de projets durables, fonctionnels et pensés sur mesure. Chaque réalisation est l&apos;occasion d&apos;allier la précision du travail artisanal, la connaissance des matériaux et une véritable passion pour le bois.
+          </p>
+          <p>
+            Installé au cœur du Jura, je travaille aujourd&apos;hui depuis un grand atelier que j&apos;ai moi-même conçu et construit. Un lieu à mon image : authentique, exigeant et entièrement dédié au bois.
+          </p>
+          <p>
+            Oli&apos;Wood, c&apos;est avant tout l&apos;histoire d&apos;un artisan qui a fait de sa passion d&apos;enfance un véritable savoir-faire, au service de l&apos;ossature bois.
           </p>
         </div>
 

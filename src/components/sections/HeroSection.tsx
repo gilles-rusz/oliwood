@@ -33,7 +33,7 @@ export function HeroSection({ noel = false }: { noel?: boolean }) {
         background: 'linear-gradient(90deg, rgba(74,28,1,.9) 0%, rgba(74,28,1,.66) 32%, rgba(74,28,1,.2) 62%, transparent 85%)',
       }} />
 
-      {/* ── Logo Oli'Wood, centré en haut ── */}
+      {/* ── Logo Oli'Wood, au centre du hero, légèrement à gauche ── */}
       <div className="hero-logo" aria-hidden>
         <div className="hero-logo-roll">
           <LogoImage width={260} height={260} alt="" style={{ width: '100%', height: 'auto', display: 'block' }} />
@@ -112,7 +112,7 @@ export function HeroSection({ noel = false }: { noel?: boolean }) {
         .hero-logo {
           position: absolute;
           top: clamp(76px, 10vh, 112px);
-          left: 50%;
+          left: 64%;
           z-index: 12;
           width: clamp(150px, 18vw, 250px);
           transform: translateX(-50%);
@@ -162,6 +162,14 @@ export function HeroSection({ noel = false }: { noel?: boolean }) {
           73%                 { transform: rotate(-7deg) scale(1.07); }
           78%                 { transform: rotate(6deg) scale(1.05); }
           85%                 { transform: rotate(-3deg) scale(1.03); }
+        }
+        /* Sur mobile et tablette, le texte occupe toute la largeur : logo recentré. */
+        @media (max-width: 1023px) {
+          .hero-logo { left: 50%; }
+        }
+        /* Sur grand écran, le texte s'arrête plus tôt : logo ramené vers le centre. */
+        @media (min-width: 1600px) {
+          .hero-logo { left: 56%; }
         }
         @media (prefers-reduced-motion: reduce) {
           .hero-logo, .hero-logo-roll, .hero-jura { animation: none; }

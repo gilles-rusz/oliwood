@@ -67,6 +67,17 @@ const TERRASSE_TITLES = [
   'Terrasse en douglas rainuré',
 ]
 
+const CARPORT_TITLES = [
+  'Carport adossé avec couverture bac acier',
+  'Carport double avec claustra brise-vue',
+  'Carport fermé avec bardage à claire-voie',
+  'Carport anthracite avec couverture translucide',
+  'Carport bois à toit plat',
+  'Grand carport avec bardage douglas',
+  'Carport en longueur avec gouttière zinc',
+  'Carport double avec claustra en enfilade',
+]
+
 function catalogue(slug, category, titles) {
   return titles.map((title, i) => {
     const n = String(i + 1).padStart(2, '0')
@@ -83,6 +94,7 @@ function catalogue(slug, category, titles) {
 const REALISATIONS = [
   ...catalogue('terrasse', 'TERRASSE', TERRASSE_TITLES),
   ...catalogue('pergola', 'PERGOLA', PERGOLA_TITLES),
+  ...catalogue('carport', 'CARPORT', CARPORT_TITLES),
 ]
 
 let created = 0

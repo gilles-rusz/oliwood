@@ -1,29 +1,22 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import type { Realisation } from '@prisma/client'
 
 interface Card {
   title: string
   img: string
+  href: string
   position?: string
 }
 
-const PLACEHOLDERS: Card[] = [
-  { title: 'Carport',  img: '/images/carport.jpg' },
-  { title: 'Pergola',  img: '/images/pergola.jpg' },
-  { title: 'Terrasse', img: '/images/terrasse.jpg' },
-  { title: 'Et autres, selon vos envies', img: '/images/autres.jpg', position: '14% center' },
+const CARDS: Card[] = [
+  { title: 'Carport',  img: '/images/carport.jpg',  href: '/realisations?categorie=CARPORT' },
+  { title: 'Pergola',  img: '/images/pergola.jpg',  href: '/realisations?categorie=PERGOLA' },
+  { title: 'Terrasse', img: '/images/terrasse.jpg', href: '/realisations?categorie=TERRASSE' },
+  { title: 'Et autres, selon vos envies', img: '/images/autres.jpg', href: '/realisations?categorie=AUTRE', position: '14% center' },
 ]
 
-interface Props { realisations: Realisation[] }
-
-export function RealisationsPreview({ realisations }: Props) {
-  const cards: Card[] = realisations.length > 0
-    ? realisations.slice(0, 4).map(r => ({
-        title: r.title,
-        img:   r.thumbUrl || r.imageUrl,
-      }))
-    : PLACEHOLDERS
+export function RealisationsPreview() {
+  const cards = CARDS
 
   return (
     <section style={{ background: 'transparent', padding: '80px 0' }}>
@@ -47,17 +40,13 @@ export function RealisationsPreview({ realisations }: Props) {
 
         <div className="cards-2x2">
           {cards.map(c => (
-            <Link key={c.title} href="/realisations" className="card-photo">
-              {c.img ? (
-                <Image
-                  src={c.img}
-                  alt={c.title}
-                  fill
-                  style={{ objectFit: 'cover', objectPosition: c.position ?? 'center' }}
-                />
-              ) : (
-                <div className="card-photo-empty" />
-              )}
+            <Link key={c.title} href={c.href} className="card-photo">
+              <Image
+                src={c.img}
+                alt={c.title}
+                fill
+                style={{ objectFit: 'cover', objectPosition: c.position ?? 'center' }}
+              />
               <div className="card-photo-meta">
                 <h3>{c.title}</h3>
               </div>

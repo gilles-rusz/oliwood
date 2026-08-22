@@ -3,8 +3,8 @@ import { RealisationsGrid } from '@/components/sections/RealisationsGrid'
 import { getRealisations } from '@/lib/realisations'
 
 export const metadata: Metadata = {
-  title: 'Nos Réalisations',
-  description: 'Découvrez nos projets en bois : charpentes, terrasses, pergolas, cabanes. Chaque réalisation est unique.',
+  title: 'Mes Réalisations',
+  description: 'Découvrez mes réalisations en bois dans le Jura : carports et abris, terrasses, pergolas et structures sur mesure.',
 }
 
 interface PageProps {
@@ -19,12 +19,12 @@ export default async function RealisationsPage({ searchParams }: PageProps) {
     <div className="min-h-screen pt-24 pb-20">
       {/* Header */}
       <div className="text-center py-16 px-4">
-        <p className="section-label mb-4">Nos projets</p>
+        <p className="section-label mb-4">Mes projets</p>
         <h1 className="section-title mb-4">Réalisations</h1>
         <div className="wood-rule" />
         <p className="text-cream-muted max-w-xl mx-auto text-sm leading-relaxed mt-4">
-          Chaque chantier est une histoire unique. Découvrez nos créations en bois,
-          de la charpente traditionnelle à la cabane dans les arbres.
+          Chaque chantier est une histoire unique. Découvrez mes réalisations en bois :
+          carports et abris, terrasses, pergolas et structures sur mesure.
         </p>
       </div>
 

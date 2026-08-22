@@ -6,12 +6,11 @@ import type { Realisation } from '@prisma/client'
 import { clsx } from 'clsx'
 
 const CATEGORIES = [
-  { value: undefined,        label: 'Tous' },
-  { value: 'OSSATURE_BOIS',  label: 'Ossature bois' },
-  { value: 'CHARPENTE',      label: 'Charpente' },
-  { value: 'CARPORT',        label: 'Carport' },
-  { value: 'PERGOLA',        label: 'Pergola' },
-  { value: 'TERRASSE',       label: 'Terrasse' },
+  { value: undefined,  label: 'Tous' },
+  { value: 'CARPORT',  label: 'Carport & Abris' },
+  { value: 'TERRASSE', label: 'Terrasse' },
+  { value: 'PERGOLA',  label: 'Pergola' },
+  { value: 'AUTRE',    label: 'Autres' },
 ]
 
 function categoryLabel(value: string) {

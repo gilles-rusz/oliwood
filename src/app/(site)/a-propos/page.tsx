@@ -29,10 +29,10 @@ export default function AProposPage() {
           Mon histoire
         </h1>
 
-        <div style={{
+        <div className="paper-card" style={{
           fontFamily: "'Khand', sans-serif",
-          fontSize: '20px', fontWeight: 300,
-          color: 'var(--creme)',
+          fontSize: '20px', fontWeight: 400,
+          color: '#53341a',
           lineHeight: 1.7,
           display: 'flex', flexDirection: 'column', gap: '20px',
         }}>

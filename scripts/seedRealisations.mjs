@@ -155,7 +155,12 @@ try {
     }
 
     if (existing) {
-      await prisma.realisation.update({ where: { id: existing.id }, data })
+      // Les textes et le classement sont modifiables depuis l'admin : on ne
+      // réécrit que le chemin de l'image pour ne pas écraser ces changements.
+      await prisma.realisation.update({
+        where: { id: existing.id },
+        data: { imageUrl: data.imageUrl, thumbUrl: data.thumbUrl },
+      })
       updated++
     } else {
       await prisma.realisation.create({ data })

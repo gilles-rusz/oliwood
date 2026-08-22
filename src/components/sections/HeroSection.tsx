@@ -99,7 +99,7 @@ export function HeroSection({ noel = false }: { noel?: boolean }) {
           opacity: .9,
           marginBottom: '34px',
         }}>
-          Installé à Moirans-en-Montagne, dans le Jura, je conçois et fabrique vos structures bois sur mesure — du devis à la pose.
+          Installé à Moirans-en-Montagne, dans le Jura, je conçois et fabrique vos structures bois sur mesure, du devis à la pose.
         </p>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px' }}>

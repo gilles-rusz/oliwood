@@ -33,7 +33,7 @@ export function HeroSection({ noel = false }: { noel?: boolean }) {
         background: 'linear-gradient(90deg, rgba(74,28,1,.9) 0%, rgba(74,28,1,.66) 32%, rgba(74,28,1,.2) 62%, transparent 85%)',
       }} />
 
-      {/* ── Logo Oli'Wood, au centre du hero, légèrement à gauche ── */}
+      {/* ── Logo Oli'Wood : tombe du haut et se pose à droite du texte ── */}
       <div className="hero-logo" aria-hidden>
         <div className="hero-logo-roll">
           <LogoImage width={260} height={260} alt="" style={{ width: '100%', height: 'auto', display: 'block' }} />
@@ -111,10 +111,10 @@ export function HeroSection({ noel = false }: { noel?: boolean }) {
       <style jsx>{`
         .hero-logo {
           position: absolute;
-          top: clamp(76px, 10vh, 112px);
-          left: 64%;
+          top: 52vh;
+          left: 80%;
           z-index: 12;
-          width: clamp(150px, 18vw, 250px);
+          width: clamp(120px, 18vw, 250px);
           transform: translateX(-50%);
           filter: drop-shadow(0 12px 26px rgba(0, 0, 0, .5));
           animation: logoBounce 1.7s cubic-bezier(.4, 0, .6, 1) .2s both;
@@ -142,7 +142,7 @@ export function HeroSection({ noel = false }: { noel?: boolean }) {
           animation-play-state: paused;
         }
         @keyframes logoBounce {
-          0%   { opacity: 0; transform: translateX(-50%) translateY(-70vh); }
+          0%   { opacity: 0; transform: translateX(-50%) translateY(-120vh); }
           8%   { opacity: 1; }
           38%  { transform: translateX(-50%) translateY(0); animation-timing-function: ease-out; }
           56%  { transform: translateX(-50%) translateY(-90px); animation-timing-function: ease-in; }
@@ -163,13 +163,9 @@ export function HeroSection({ noel = false }: { noel?: boolean }) {
           78%                 { transform: rotate(6deg) scale(1.05); }
           85%                 { transform: rotate(-3deg) scale(1.03); }
         }
-        /* Sur mobile et tablette, le texte occupe toute la largeur : logo recentré. */
-        @media (max-width: 1023px) {
-          .hero-logo { left: 50%; }
-        }
-        /* Sur grand écran, le texte s'arrête plus tôt : logo ramené vers le centre. */
-        @media (min-width: 1600px) {
-          .hero-logo { left: 56%; }
+        /* Sur mobile, le logo se pose plus bas pour laisser respirer le texte. */
+        @media (max-width: 767px) {
+          .hero-logo { top: 62vh; left: 74%; }
         }
         @media (prefers-reduced-motion: reduce) {
           .hero-logo, .hero-logo-roll, .hero-jura { animation: none; }

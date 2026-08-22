@@ -6,11 +6,10 @@ import type { Realisation } from '@prisma/client'
 import { clsx } from 'clsx'
 
 const CATEGORIES = [
-  { value: 'CARPORT',       label: 'Carport' },
-  { value: 'PERGOLA',       label: 'Pergola' },
-  { value: 'CHARPENTE',     label: 'Charpente' },
-  { value: 'OSSATURE_BOIS', label: 'Ossature bois' },
-  { value: 'TERRASSE',      label: 'Terrasse' },
+  { value: 'CARPORT',  label: 'Carport & Abris' },
+  { value: 'TERRASSE', label: 'Terrasse' },
+  { value: 'PERGOLA',  label: 'Pergola' },
+  { value: 'AUTRE',    label: 'Autres' },
 ] as const
 
 function categoryLabel(value: string) {
@@ -24,7 +23,7 @@ interface Props {
 export function AdminGalerieClient({ realisations: initial }: Props) {
   const [photos, setPhotos]       = useState<Realisation[]>(initial)
   const [uploading, setUploading] = useState(false)
-  const [form, setForm]           = useState({ title: '', category: 'OSSATURE_BOIS' as string, description: '', featured: false })
+  const [form, setForm]           = useState({ title: '', category: 'TERRASSE' as string, description: '', featured: false })
   const [editing, setEditing]     = useState<Realisation | null>(null)
   const [saving, setSaving]       = useState(false)
   const fileRef                   = useRef<HTMLInputElement>(null)
@@ -46,7 +45,7 @@ export function AdminGalerieClient({ realisations: initial }: Props) {
       const data = await res.json()
       if (data.realisation) {
         setPhotos(prev => [data.realisation, ...prev])
-        setForm({ title: '', category: 'OSSATURE_BOIS', description: '', featured: false })
+        setForm({ title: '', category: 'TERRASSE', description: '', featured: false })
       }
     } finally {
       setUploading(false)

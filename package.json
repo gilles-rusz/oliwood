@@ -12,6 +12,7 @@
     "db:generate": "prisma generate",
     "setup:local": "node scripts/setupLocal.mjs",
     "admin:create": "node scripts/createAdmin.mjs",
+    "seed:realisations": "node scripts/seedRealisations.mjs",
     "db:local:stop": "docker compose down"
   },
   "dependencies": {

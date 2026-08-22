@@ -21,7 +21,7 @@ export function Footer() {
               Oli&apos;Wood
             </div>
             <p style={{ fontFamily: "'Khand', sans-serif", fontWeight: 300, fontSize: '16px', lineHeight: 1.6, color: 'var(--gris-clair)', maxWidth: 240 }}>
-              Votre spécialiste ossature bois. Carports, pergolas, terrasses et structures sur mesure, fabriqués en France.
+              Votre spécialiste bois. Carports, pergolas, terrasses et structures sur mesure, fabriqués en France.
             </p>
           </div>
 
@@ -53,7 +53,7 @@ export function Footer() {
               Prestations
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {['Carports', 'Pergolas', 'Terrasses', 'Ossature bois'].map(item => (
+              {['Carport', 'Pergola', 'Terrasse'].map(item => (
                 <li key={item} style={{ fontFamily: "'Khand', sans-serif", fontWeight: 300, fontSize: '16px', color: 'var(--gris-clair)' }}>
                   {item}
                 </li>
@@ -68,9 +68,9 @@ export function Footer() {
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {[
-                { label: '📍 9 Rue du Tongea, 39260 Moirans-en-Montagne' },
-                { label: '📞 00 00 00 00 00' },
-                { label: '✉ contact@oliwood.fr' },
+                { label: '📍 1 Chemin sous Tongea, 39260 Moirans-en-Montagne' },
+                { label: '📞 06 52 14 74 34', href: 'tel:+33652147434' },
+                { label: '✉ oliwood.eurl@gmail.com', href: 'mailto:oliwood.eurl@gmail.com' },
                 { label: '🕐 Lun–Sam, 8h–19h' },
                 { label: '📘 Facebook', href: 'https://www.facebook.com/OliWood.OssatureBois' },
               ].map(({ label, href }) => (

@@ -14,6 +14,7 @@ Docker Desktop doit être installé et démarré.
 npm install
 npm run setup:local
 npm run admin:create
+npm run seed:realisations
 npm run dev
 ```
 
@@ -33,8 +34,18 @@ cp .env.example .env
 npm run db:generate
 npm run db:push
 npm run admin:create
+npm run seed:realisations
 npm run dev
 ```
+
+### Galerie : photos livrées avec le site
+
+Les photos du catalogue initial sont versionnées dans `public/images/realisations/<catégorie>/`.
+`npm run seed:realisations` crée les fiches correspondantes en base (titre, catégorie, ordre).
+Le script est idempotent : on peut le relancer après chaque déploiement sans créer de doublons.
+
+Les photos ajoutées ensuite depuis l'admin sont, elles, envoyées dans le bucket Supabase Storage
+`realisations` ; les deux sources s'affichent dans la même galerie.
 
 ---
 

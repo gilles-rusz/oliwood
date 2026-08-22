@@ -43,6 +43,11 @@ npm run dev
 Les photos du catalogue initial sont versionnées dans `public/images/realisations/<catégorie>/`.
 `npm run seed:realisations` crée les fiches correspondantes en base (titre, catégorie, ordre).
 Le script est idempotent : on peut le relancer après chaque déploiement sans créer de doublons.
+Sur une fiche déjà en base, il ne réécrit que le chemin de l'image : les titres, descriptions,
+catégories et statuts modifiés depuis l'admin sont conservés.
+
+Chaque vignette de l'admin affiche la référence de sa photo (par ex. `pergola-07`), et un champ de
+recherche permet de retrouver une photo par titre, description ou référence.
 
 Les photos ajoutées ensuite depuis l'admin sont, elles, envoyées dans le bucket Supabase Storage
 `realisations` ; les deux sources s'affichent dans la même galerie.

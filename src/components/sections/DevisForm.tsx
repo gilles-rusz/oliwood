@@ -98,10 +98,9 @@ export function DevisForm() {
 
   if (success) {
     return (
-      <div className="text-center py-20">
-        <div className="text-wood-400 text-5xl mb-6">✓</div>
-        <h2 className="font-display text-2xl font-bold text-cream mb-3">Demande envoyée !</h2>
-        <p className="text-cream/90 text-sm">
+      <div className="devis-paper devis-field text-center" style={{ padding: '54px 28px' }}>
+        <div className="devis-choice-title" style={{ fontSize: 30 }}>Demande envoyée !</div>
+        <p className="devis-choice-desc" style={{ fontSize: 17 }}>
           Nous avons bien reçu votre demande et vous répondrons sous 48h.
         </p>
       </div>
@@ -123,44 +122,31 @@ export function DevisForm() {
       </div>
 
       {/* Progress bar */}
-      <div className="flex gap-1 mb-10">
+      <div className="devis-steps">
         {STEPS.map((s, i) => (
-          <div key={s} className="flex-1">
-            <div className={clsx(
-              'h-0.5 transition-all duration-500',
-              i <= step ? 'bg-wood-400' : 'bg-cream/10'
-            )} />
-            <p className={clsx(
-              'text-[0.6rem] tracking-widest uppercase mt-2 transition-colors',
-              i === step ? 'text-wood-400' : i < step ? 'text-cream/40' : 'text-cream/20'
-            )}>
-              {s}
-            </p>
+          <div key={s} className={clsx('devis-step', i === step ? 'is-current' : i < step && 'is-done')}>
+            <div className="devis-step-bar" />
+            <p className="devis-step-label">{s}</p>
           </div>
         ))}
       </div>
 
       {/* ── Étape 1 — Type de projet ── */}
       {step === 0 && (
-        <div className="space-y-3">
-          <p className="text-cream/90 text-sm mb-6">Quel type de projet souhaitez-vous réaliser ?</p>
+        <div className="space-y-4">
+          <p className="devis-question">Quel type de projet souhaitez-vous réaliser ?</p>
           {TYPES_PROJET.map(({ value, label, desc }) => (
             <button
               key={value}
               type="button"
               onClick={() => { setValue('typeProjet', value); setStep(1) }}
-              className={clsx(
-                'w-full text-left px-5 py-4 border transition-all duration-200',
-                typeProjet === value
-                  ? 'border-wood-400 bg-wood-400/10'
-                  : 'border-cream/10 bg-dark-800 hover:border-cream/25'
-              )}
+              className={clsx('devis-paper devis-choice', typeProjet === value && 'is-selected')}
             >
-              <p className="font-medium text-cream text-sm">{label}</p>
-              <p className="text-cream/75 text-xs mt-0.5">{desc}</p>
+              <span className="devis-choice-title">{label}</span>
+              <span className="devis-choice-desc block">{desc}</span>
             </button>
           ))}
-          {errors.typeProjet && <p className="form-error">{errors.typeProjet.message}</p>}
+          {errors.typeProjet && <p className="devis-error">{errors.typeProjet.message}</p>}
         </div>
       )}
 
@@ -168,57 +154,57 @@ export function DevisForm() {
       {step === 1 && (
         <div className="space-y-5">
           {typeProjet === 'AUTRE' ? (
-            <>
-              <p className="text-cream/90 text-sm">Décrivez votre projet</p>
-              <div>
-                <textarea
-                  {...register('description')}
-                  className="form-input min-h-[180px] resize-none"
-                  placeholder="Nature du projet, dimensions, matériaux, contraintes…"
-                />
-                <p className="text-cream/40 text-xs mt-2">
-                  N&apos;oubliez pas de donner les dimensions de votre projet.
-                </p>
-              </div>
-            </>
+            <div className="devis-paper devis-field">
+              <label className="devis-label">Décrivez votre projet</label>
+              <textarea
+                {...register('description')}
+                className="devis-input min-h-[200px] resize-none"
+                placeholder="Nature du projet, dimensions, matériaux, contraintes…"
+              />
+              <p className="devis-hint">
+                N&apos;oubliez pas de donner les dimensions de votre projet.
+              </p>
+            </div>
           ) : (
             <>
-              <p className="text-cream/90 text-sm">Dimensions souhaitées</p>
-              <div className="grid grid-cols-3 gap-3">
-                {([
-                  ['longueur', 'Longueur'],
-                  ['largeur', 'Largeur'],
-                  ['hauteur', 'Hauteur'],
-                ] as const).map(([name, label]) => (
-                  <div key={name}>
-                    <label className="form-label">{label} (m)</label>
-                    <input
-                      {...register(name)}
-                      type="number"
-                      step="0.01"
-                      inputMode="decimal"
-                      className="form-input"
-                      placeholder="0"
-                    />
-                    {errors[name] && <p className="form-error">{errors[name]?.message}</p>}
-                  </div>
-                ))}
+              <div className="devis-paper devis-field">
+                <label className="devis-label">Dimensions souhaitées (en mètres)</label>
+                <div className="grid grid-cols-3 gap-3">
+                  {([
+                    ['longueur', 'Longueur'],
+                    ['largeur', 'Largeur'],
+                    ['hauteur', 'Hauteur'],
+                  ] as const).map(([name, label]) => (
+                    <div key={name}>
+                      <input
+                        {...register(name)}
+                        type="number"
+                        step="0.01"
+                        inputMode="decimal"
+                        className="devis-input"
+                        placeholder={label}
+                        aria-label={label}
+                      />
+                      {errors[name] && <p className="devis-error">{errors[name]?.message}</p>}
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div>
-                <label className="form-label">Type de terrain actuel</label>
+              <div className="devis-paper devis-field">
+                <label className="devis-label">Type de terrain actuel</label>
                 <input
                   {...register('typeTerrain')}
-                  className="form-input"
+                  className="devis-input"
                   placeholder="Terre, gravier, dalle béton, pelouse…"
                 />
               </div>
 
               {isStructureCouverte(typeProjet) && (
                 <>
-                  <div>
-                    <label className="form-label">Implantation</label>
-                    <div className="grid grid-cols-2 gap-2">
+                  <div className="devis-paper devis-field">
+                    <label className="devis-label">Implantation</label>
+                    <div className="grid grid-cols-2 gap-3">
                       {([
                         ['ADOSSE', 'Adossé à une structure existante'],
                         ['AUTOPORTE', 'Autoporté'],
@@ -227,12 +213,7 @@ export function DevisForm() {
                           key={value}
                           type="button"
                           onClick={() => setValue('implantation', value)}
-                          className={clsx(
-                            'px-4 py-3 border text-xs text-left transition-all duration-200',
-                            implantation === value
-                              ? 'border-wood-400 text-wood-400 bg-wood-400/10'
-                              : 'border-cream/10 text-cream/85 bg-dark-800 hover:border-cream/25'
-                          )}
+                          className={clsx('devis-pill', implantation === value && 'is-selected')}
                         >
                           {label}
                         </button>
@@ -240,20 +221,15 @@ export function DevisForm() {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="form-label">Besoin de plots béton ?</label>
-                    <div className="grid grid-cols-2 gap-2">
+                  <div className="devis-paper devis-field">
+                    <label className="devis-label">Besoin de plots béton ?</label>
+                    <div className="grid grid-cols-2 gap-3">
                       {(['OUI', 'NON'] as const).map(value => (
                         <button
                           key={value}
                           type="button"
                           onClick={() => setValue('plotsBeton', value)}
-                          className={clsx(
-                            'px-4 py-3 border text-xs transition-all duration-200',
-                            plotsBeton === value
-                              ? 'border-wood-400 text-wood-400 bg-wood-400/10'
-                              : 'border-cream/10 text-cream/85 bg-dark-800 hover:border-cream/25'
-                          )}
+                          className={clsx('devis-pill', plotsBeton === value && 'is-selected')}
                         >
                           {value === 'OUI' ? 'Oui' : 'Non'}
                         </button>
@@ -261,33 +237,33 @@ export function DevisForm() {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="form-label">Toiture souhaitée</label>
+                  <div className="devis-paper devis-field">
+                    <label className="devis-label">Toiture souhaitée</label>
                     <textarea
                       {...register('toiture')}
-                      className="form-input min-h-[90px] resize-none"
+                      className="devis-input min-h-[90px] resize-none"
                       placeholder="Tuiles, bac acier, polycarbonate… et couleur souhaitée"
                     />
                   </div>
                 </>
               )}
 
-              <div>
-                <label className="form-label">Finition ou type de bois souhaité</label>
+              <div className="devis-paper devis-field">
+                <label className="devis-label">Finition ou type de bois souhaité</label>
                 <textarea
                   {...register('finitionBois')}
-                  className="form-input min-h-[90px] resize-none"
+                  className="devis-input min-h-[90px] resize-none"
                   placeholder="Naturelle, lasure, peinture… et couleur souhaitée"
                 />
               </div>
             </>
           )}
 
-          <div className="flex gap-3 mt-6">
-            <button type="button" onClick={() => setStep(0)} className="btn-outline text-xs py-2 flex-1">
+          <div className="flex gap-3 pt-2">
+            <button type="button" onClick={() => setStep(0)} className="devis-btn-ghost">
               ← Retour
             </button>
-            <button type="button" onClick={() => setStep(2)} className="btn-primary text-xs py-2 flex-1">
+            <button type="button" onClick={() => setStep(2)} className="devis-btn">
               Suivant →
             </button>
           </div>
@@ -297,69 +273,67 @@ export function DevisForm() {
       {/* ── Étape 3 — Coordonnées ── */}
       {step === 2 && (
         <div className="space-y-4">
-          <p className="text-cream/90 text-sm mb-4">Vos coordonnées pour vous recontacter</p>
+          <p className="devis-question">Vos coordonnées pour vous recontacter</p>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="form-label">Prénom *</label>
-              <input {...register('prenom')} className="form-input" autoComplete="given-name" />
-              {errors.prenom && <p className="form-error">{errors.prenom.message}</p>}
+          <div className="devis-paper devis-field">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="devis-label">Prénom *</label>
+                <input {...register('prenom')} className="devis-input" autoComplete="given-name" />
+                {errors.prenom && <p className="devis-error">{errors.prenom.message}</p>}
+              </div>
+              <div>
+                <label className="devis-label">Nom *</label>
+                <input {...register('nom')} className="devis-input" autoComplete="family-name" />
+                {errors.nom && <p className="devis-error">{errors.nom.message}</p>}
+              </div>
             </div>
-            <div>
-              <label className="form-label">Nom *</label>
-              <input {...register('nom')} className="form-input" autoComplete="family-name" />
-              {errors.nom && <p className="form-error">{errors.nom.message}</p>}
-            </div>
           </div>
 
-          <div>
-            <label className="form-label">Email *</label>
-            <input {...register('email')} type="email" className="form-input" autoComplete="email" />
-            {errors.email && <p className="form-error">{errors.email.message}</p>}
+          <div className="devis-paper devis-field">
+            <label className="devis-label">Email *</label>
+            <input {...register('email')} type="email" className="devis-input" autoComplete="email" />
+            {errors.email && <p className="devis-error">{errors.email.message}</p>}
           </div>
 
-          <div>
-            <label className="form-label">Téléphone</label>
-            <input {...register('telephone')} type="tel" className="form-input" autoComplete="tel" placeholder="06 XX XX XX XX" />
-            {errors.telephone && <p className="form-error">{errors.telephone.message}</p>}
+          <div className="devis-paper devis-field">
+            <label className="devis-label">Téléphone</label>
+            <input {...register('telephone')} type="tel" className="devis-input" autoComplete="tel" placeholder="06 XX XX XX XX" />
+            {errors.telephone && <p className="devis-error">{errors.telephone.message}</p>}
           </div>
 
-          <div>
-            <label className="form-label">Adresse du chantier</label>
-            <input {...register('adresse')} className="form-input" autoComplete="street-address" />
+          <div className="devis-paper devis-field">
+            <label className="devis-label">Adresse du chantier</label>
+            <input {...register('adresse')} className="devis-input" autoComplete="street-address" />
           </div>
 
-          <div>
-            <label className="form-label">Ville / Code postal</label>
-            <input {...register('ville')} className="form-input" autoComplete="address-level2" />
+          <div className="devis-paper devis-field">
+            <label className="devis-label">Ville / Code postal</label>
+            <input {...register('ville')} className="devis-input" autoComplete="address-level2" />
           </div>
 
           {typeProjet !== 'AUTRE' && (
-            <div>
-              <label className="form-label">En dire plus sur votre projet</label>
+            <div className="devis-paper devis-field">
+              <label className="devis-label">En dire plus sur votre projet</label>
               <textarea
                 {...register('description')}
-                className="form-input min-h-[120px] resize-none"
+                className="devis-input min-h-[120px] resize-none"
                 placeholder="Contraintes du terrain, délai souhaité, style, questions…"
               />
             </div>
           )}
 
-          {error && (
-            <p className="text-red-400 text-sm bg-red-400/10 border border-red-400/20 px-4 py-3">
-              {error}
-            </p>
-          )}
+          {error && <p className="devis-alert">{error}</p>}
 
-          <p className="text-cream/25 text-[0.65rem] mt-2">
+          <p className="devis-legal">
             Vos données sont utilisées uniquement pour répondre à votre demande. Aucun démarchage.
           </p>
 
-          <div className="flex gap-3 mt-6">
-            <button type="button" onClick={() => setStep(1)} className="btn-outline text-xs py-2 flex-1" disabled={loading}>
+          <div className="flex gap-3 pt-2">
+            <button type="button" onClick={() => setStep(1)} className="devis-btn-ghost" disabled={loading}>
               ← Retour
             </button>
-            <button type="submit" className="btn-primary text-xs py-2 flex-1" disabled={loading}>
+            <button type="submit" className="devis-btn" disabled={loading}>
               {loading ? 'Envoi en cours…' : 'Envoyer ma demande'}
             </button>
           </div>

@@ -14,7 +14,7 @@ export default function DevisPage() {
         <p className="section-label mb-4">Votre projet</p>
         <h1 className="section-title mb-4">Demande de devis</h1>
         <div className="wood-rule" />
-        <p className="text-cream-muted max-w-xl mx-auto text-sm leading-relaxed mt-4">
+        <p className="devis-intro max-w-xl mx-auto text-sm leading-relaxed mt-4">
           Décrivez votre projet en quelques étapes.<br />
           Nous vous répondons sous 48h avec une estimation personnalisée.
         </p>

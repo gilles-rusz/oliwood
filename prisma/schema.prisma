@@ -66,7 +66,17 @@ model Devis {
   description String?
   budget      Budget?
   delai       String?
+  // Détails du projet (carport, pergola, terrasse)
+  longueur     Float?
+  largeur      Float?
+  hauteur      Float?
+  typeTerrain  String?
+  implantation Implantation?   // adossé à une structure existante ou autoporté
+  plotsBeton   Boolean?
+  toiture      String?
+  finitionBois String?
   // Localisation
+  adresse     String?
   ville       String?
   codePostal  String?
   // Statut
@@ -84,9 +94,15 @@ enum TypeProjet {
   CHARPENTE
   TERRASSE
   PERGOLA
+  CARPORT
   CABANE
   RENOVATION
   AUTRE
+}
+
+enum Implantation {
+  ADOSSE
+  AUTOPORTE
 }
 
 enum Budget {

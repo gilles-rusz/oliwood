@@ -11,7 +11,28 @@ const transporter = nodemailer.createTransport({
   },
 })
 
+const IMPLANTATION_LABELS: Record<string, string> = {
+  ADOSSE:    'Adossé à une structure existante',
+  AUTOPORTE: 'Autoporté',
+}
+
+function row(label: string, value: string) {
+  return `<tr><td style="padding:6px 0; color:#666;">${label}</td>
+            <td style="padding:6px 0;">${value}</td></tr>`
+}
+
+function dimensions(devis: Devis) {
+  const parts = [
+    devis.longueur ? `L ${devis.longueur} m` : null,
+    devis.largeur ? `l ${devis.largeur} m` : null,
+    devis.hauteur ? `H ${devis.hauteur} m` : null,
+  ].filter(Boolean)
+  return parts.length ? parts.join(' × ') : null
+}
+
 export async function sendDevisEmail(devis: Devis) {
+  const dims = dimensions(devis)
+
   const html = `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
       <h2 style="color: #c8823c; border-bottom: 1px solid #eee; padding-bottom: 12px;">
@@ -24,12 +45,17 @@ export async function sendDevisEmail(devis: Devis) {
             <td style="padding:6px 0;"><a href="mailto:${devis.email}">${devis.email}</a></td></tr>
         ${devis.telephone ? `<tr><td style="padding:6px 0; color:#666;">Téléphone</td>
             <td style="padding:6px 0;">${devis.telephone}</td></tr>` : ''}
-        ${devis.ville ? `<tr><td style="padding:6px 0; color:#666;">Ville</td>
-            <td style="padding:6px 0;">${devis.ville}</td></tr>` : ''}
+        ${devis.adresse ? row('Adresse', devis.adresse) : ''}
+        ${devis.ville ? row('Ville', devis.ville) : ''}
         <tr><td style="padding:6px 0; color:#666;">Type de projet</td>
             <td style="padding:6px 0;"><strong>${devis.typeProjet}</strong></td></tr>
-        ${devis.budget ? `<tr><td style="padding:6px 0; color:#666;">Budget</td>
-            <td style="padding:6px 0;">${devis.budget}</td></tr>` : ''}
+        ${dims ? row('Dimensions', dims) : ''}
+        ${devis.typeTerrain ? row('Terrain actuel', devis.typeTerrain) : ''}
+        ${devis.implantation ? row('Implantation', IMPLANTATION_LABELS[devis.implantation]) : ''}
+        ${devis.plotsBeton === null ? '' : row('Plots béton', devis.plotsBeton ? 'Oui' : 'Non')}
+        ${devis.toiture ? row('Toiture souhaitée', devis.toiture.replace(/\n/g, '<br>')) : ''}
+        ${devis.finitionBois ? row('Finition / bois', devis.finitionBois.replace(/\n/g, '<br>')) : ''}
+        ${devis.budget ? row('Budget', devis.budget) : ''}
         ${devis.description ? `<tr><td colspan="2" style="padding:12px 0;">
             <p style="color:#666; margin:0 0 6px;">Description :</p>
             <p style="background:#f9f9f9; padding:12px; border-left:3px solid #c8823c; margin:0;">

@@ -9,15 +9,24 @@ const schema = z.object({
   // Honeypot
   website: z.string().max(0),
 
-  typeProjet:     z.enum(['CHARPENTE','TERRASSE','PERGOLA','CABANE','RENOVATION','AUTRE']),
+  typeProjet:     z.enum(['CHARPENTE','TERRASSE','PERGOLA','CARPORT','CABANE','RENOVATION','AUTRE']),
   budget:         z.enum(['MOINS_5K','ENTRE_5K_15K','ENTRE_15K_30K','ENTRE_30K_50K','PLUS_50K','A_DEFINIR']).optional(),
-  description:    z.string().max(1000).optional(),
+  description:    z.string().max(2000).optional(),
+  longueur:       z.number().positive().max(200).optional(),
+  largeur:        z.number().positive().max(200).optional(),
+  hauteur:        z.number().positive().max(200).optional(),
+  typeTerrain:    z.string().max(200).optional(),
+  implantation:   z.enum(['ADOSSE','AUTOPORTE']).optional(),
+  plotsBeton:     z.enum(['OUI','NON']).optional(),
+  toiture:        z.string().max(1000).optional(),
+  finitionBois:   z.string().max(1000).optional(),
   prenom:         z.string().min(2).max(50),
   nom:            z.string().min(2).max(50),
   email:          z.string().email(),
   telephone:      z.string().optional(),
+  adresse:        z.string().max(200).optional(),
   ville:          z.string().optional(),
-  recaptchaToken: z.string().min(1),
+  recaptchaToken: z.string(),
 })
 
 export async function POST(req: NextRequest) {
@@ -66,6 +75,15 @@ export async function POST(req: NextRequest) {
         typeProjet:  data.typeProjet,
         description: data.description ?? null,
         budget:      data.budget ?? null,
+        longueur:     data.longueur ?? null,
+        largeur:      data.largeur ?? null,
+        hauteur:      data.hauteur ?? null,
+        typeTerrain:  data.typeTerrain ?? null,
+        implantation: data.implantation ?? null,
+        plotsBeton:   data.plotsBeton ? data.plotsBeton === 'OUI' : null,
+        toiture:      data.toiture ?? null,
+        finitionBois: data.finitionBois ?? null,
+        adresse:     data.adresse ?? null,
         ville:       data.ville ?? null,
         ipAddress:   ip,
         userAgent:   req.headers.get('user-agent') ?? null,
@@ -74,7 +92,13 @@ export async function POST(req: NextRequest) {
     })
 
     // ── Email de notification ────────────────────────────────
-    await sendDevisEmail(devis)
+    // La demande est déjà enregistrée : un SMTP absent ou en panne
+    // ne doit pas faire échouer le formulaire côté visiteur.
+    try {
+      await sendDevisEmail(devis)
+    } catch (e) {
+      console.error('[Contact API] Email non envoyé:', e)
+    }
 
     return NextResponse.json({ ok: true })
   } catch (e) {

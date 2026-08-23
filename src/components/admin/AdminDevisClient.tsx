@@ -15,6 +15,20 @@ const STATUT_COLORS: Record<string, string> = {
   ARCHIVE:   'text-cream/20 bg-cream/5',
 }
 
+const IMPLANTATION_LABELS: Record<string, string> = {
+  ADOSSE:    'Adossé à une structure existante',
+  AUTOPORTE: 'Autoporté',
+}
+
+function dimensions(d: Devis) {
+  const parts = [
+    d.longueur ? `L ${d.longueur} m` : null,
+    d.largeur ? `l ${d.largeur} m` : null,
+    d.hauteur ? `H ${d.hauteur} m` : null,
+  ].filter(Boolean)
+  return parts.length ? parts.join(' × ') : null
+}
+
 interface Props {
   devis: Devis[]
 }
@@ -133,13 +147,18 @@ export function AdminDevisClient({ devis: initial }: Props) {
           </div>
 
           <div className="space-y-2 text-sm border-t border-cream/5 pt-4 mb-4">
-            {[
-              ['Projet',    selected.typeProjet],
-              ['Budget',    selected.budget ?? '—'],
-              ['Téléphone', selected.telephone ?? '—'],
-              ['Ville',     selected.ville ?? '—'],
-              ['Reçu le',   new Date(selected.createdAt).toLocaleDateString('fr-FR', { dateStyle: 'long' })],
-            ].map(([label, value]) => (
+            {([
+              ['Projet',         selected.typeProjet],
+              ['Dimensions',     dimensions(selected)],
+              ['Terrain actuel', selected.typeTerrain],
+              ['Implantation',   selected.implantation ? IMPLANTATION_LABELS[selected.implantation] : null],
+              ['Plots béton',    selected.plotsBeton === null ? null : selected.plotsBeton ? 'Oui' : 'Non'],
+              ['Budget',         selected.budget],
+              ['Téléphone',      selected.telephone],
+              ['Adresse',        selected.adresse],
+              ['Ville',          selected.ville],
+              ['Reçu le',        new Date(selected.createdAt).toLocaleDateString('fr-FR', { dateStyle: 'long' })],
+            ] as const).filter(([, value]) => value).map(([label, value]) => (
               <div key={label} className="flex justify-between gap-2">
                 <span className="text-cream/40 text-xs">{label}</span>
                 <span className="text-cream text-xs text-right">{value}</span>
@@ -147,12 +166,16 @@ export function AdminDevisClient({ devis: initial }: Props) {
             ))}
           </div>
 
-          {selected.description && (
-            <div className="border-t border-cream/5 pt-4 mb-4">
-              <p className="text-cream/40 text-xs mb-1">Description</p>
-              <p className="text-cream/70 text-xs leading-relaxed">{selected.description}</p>
+          {([
+            ['Toiture souhaitée', selected.toiture],
+            ['Finition / bois', selected.finitionBois],
+            ['Description', selected.description],
+          ] as const).filter(([, value]) => value).map(([label, value]) => (
+            <div key={label} className="border-t border-cream/5 pt-4 mb-4">
+              <p className="text-cream/40 text-xs mb-1">{label}</p>
+              <p className="text-cream/70 text-xs leading-relaxed whitespace-pre-line">{value}</p>
             </div>
-          )}
+          ))}
 
           {/* Changer le statut */}
           <div className="border-t border-cream/5 pt-4">

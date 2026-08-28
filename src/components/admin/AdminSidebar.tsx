@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
@@ -15,11 +16,45 @@ const links = [
 
 export function AdminSidebar() {
   const pathname = usePathname()
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => setOpen(false), [pathname])
 
   return (
-    <aside className="fixed left-0 top-0 w-60 h-screen bg-brun border-r border-jaune/10 flex flex-col">
+    <>
+      {/* Barre mobile */}
+      <header className="lg:hidden fixed inset-x-0 top-0 z-40 h-14 bg-brun border-b border-jaune/10 flex items-center justify-between px-4">
+        <p className="font-display text-lg font-bold">
+          <span className="text-jaune">Oli</span>
+          <span className="text-cream">Wood</span>
+          <span className="text-cream/40 text-[0.6rem] tracking-widest uppercase ml-2">Admin</span>
+        </p>
+        <button
+          onClick={() => setOpen(v => !v)}
+          aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'}
+          aria-expanded={open}
+          className="text-cream text-2xl leading-none px-2 py-1"
+        >
+          {open ? '✕' : '☰'}
+        </button>
+      </header>
+
+      {open && (
+        <div
+          onClick={() => setOpen(false)}
+          className="lg:hidden fixed inset-0 top-14 z-30 bg-black/60"
+        />
+      )}
+
+      <aside
+        className={clsx(
+          'fixed left-0 z-30 w-60 bg-brun border-r border-jaune/10 flex flex-col transition-transform',
+          'top-14 h-[calc(100vh-3.5rem)] lg:top-0 lg:h-screen lg:translate-x-0',
+          open ? 'translate-x-0' : '-translate-x-full',
+        )}
+      >
       {/* Logo */}
-      <div className="p-6 border-b border-jaune/10">
+      <div className="hidden lg:block p-6 border-b border-jaune/10">
         <p className="font-display text-lg font-bold">
           <span className="text-jaune">Oli</span>
           <span className="text-cream">Wood</span>
@@ -64,6 +99,7 @@ export function AdminSidebar() {
           Déconnexion
         </button>
       </div>
-    </aside>
+      </aside>
+    </>
   )
 }

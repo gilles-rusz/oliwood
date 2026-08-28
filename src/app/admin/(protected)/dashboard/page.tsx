@@ -17,7 +17,7 @@ export default async function AdminDashboard() {
       <h1 className="font-display text-2xl font-bold text-cream mb-8">Tableau de bord</h1>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
         {[
           { label: 'Réalisations',   value: totalPhotos  },
           { label: 'Devis reçus',    value: totalDevis   },

@@ -79,7 +79,7 @@ export function AdminDevisClient({ devis: initial }: Props) {
   const filtered = filter === 'ALL' ? devis : devis.filter(d => d.statut === filter)
 
   return (
-    <div className="flex gap-6">
+    <div className="flex flex-col lg:flex-row gap-6">
       {/* Liste */}
       <div className="flex-1 min-w-0">
         {/* Filtres */}
@@ -169,7 +169,7 @@ export function AdminDevisClient({ devis: initial }: Props) {
 
       {/* Détail */}
       {selected && (
-        <div className="w-80 shrink-0 bg-dark-800 border border-cream/5 p-5 self-start sticky top-8">
+        <div className="w-full lg:w-80 shrink-0 bg-dark-800 border border-cream/5 p-5 self-start lg:sticky lg:top-8">
           <div className="flex items-start justify-between mb-4">
             <div>
               <p className="font-display font-bold text-cream">{selected.prenom} {selected.nom}</p>

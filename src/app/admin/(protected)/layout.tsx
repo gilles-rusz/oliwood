@@ -7,7 +7,7 @@ export default function ProtectedAdminLayout({ children }: { children: React.Rea
   return (
     <div className="flex min-h-screen bg-dark-900">
       <AdminSidebar />
-      <main className="flex-1 ml-60 p-8">
+      <main className="flex-1 min-w-0 pt-20 px-4 pb-10 lg:pt-8 lg:px-8 lg:pb-8 lg:ml-60">
         {children}
       </main>
     </div>

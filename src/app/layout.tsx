@@ -3,12 +3,14 @@ import './globals.css'
 import { SeasonalDecorations } from '@/components/ui/SeasonalDecorations'
 import { getSiteSettings } from '@/lib/settings'
 
-export const metadata: Metadata = {
+const DEFAULT_DESCRIPTION = 'Spécialistes de la construction en bois sur mesure : charpentes, terrasses, pergolas, cabanes. Artisans passionnés.'
+
+const baseMetadata: Metadata = {
   title: {
     default: 'OliWood – Charpenterie & Construction Bois',
     template: '%s | OliWood',
   },
-  description: 'Spécialistes de la construction en bois sur mesure : charpentes, terrasses, pergolas, cabanes. Artisans passionnés.',
+  description: DEFAULT_DESCRIPTION,
   keywords: ['charpente', 'bois', 'terrasse', 'pergola', 'cabane', 'construction bois', 'artisan'],
   openGraph: {
     type: 'website',
@@ -19,6 +21,14 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings()
+  return {
+    ...baseMetadata,
+    description: settings?.metaDescription || DEFAULT_DESCRIPTION,
+  }
 }
 
 export default async function RootLayout({

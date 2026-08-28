@@ -1,54 +1,54 @@
 // scripts/createAdmin.mjs
-// Usage: node scripts/createAdmin.mjs
+// Interactif       : node scripts/createAdmin.mjs
+// Non interactif   : node scripts/createAdmin.mjs contact@oliwood.fr "MonMotDePasse"
+//                    ADMIN_EMAIL=... ADMIN_PASSWORD=... node scripts/createAdmin.mjs
 
 import { createInterface } from 'readline'
-import { createHash } from 'crypto'
 import bcrypt from 'bcryptjs'
+import { loadEnv } from './loadEnv.mjs'
 
-// Charger les env vars depuis .env.local ou .env
-const fs = await import('fs')
-const path = await import('path')
+const MIN_LENGTH = 10
 
-const envPath = ['.env.local', '.env']
-  .map(f => path.join(process.cwd(), f))
-  .find(p => fs.existsSync(p))
-if (envPath) {
-  const lines = fs.readFileSync(envPath, 'utf-8').split('\n')
-  for (const line of lines) {
-    const [key, ...vals] = line.split('=')
-    if (key && vals.length) process.env[key.trim()] = vals.join('=').trim().replace(/^"|"$/g, '')
-  }
-}
+loadEnv()
 
 const { PrismaClient } = await import('@prisma/client')
-
 const prisma = new PrismaClient()
 
-const rl = createInterface({ input: process.stdin, output: process.stdout })
-const question = (q) => new Promise(resolve => rl.question(q, resolve))
+const [argEmail, argPassword] = process.argv.slice(2)
 
-console.log('\n🪵 OliWood — Création du compte admin\n')
+let email    = argEmail    || process.env.ADMIN_EMAIL    || ''
+let password = argPassword || process.env.ADMIN_PASSWORD || ''
 
-const email    = await question('Email admin : ')
-const password = await question('Mot de passe (min 12 caractères) : ')
+console.log("\n🪵 OliWood — Compte admin\n")
 
-if (password.length < 12) {
-  console.error('❌ Mot de passe trop court (minimum 12 caractères)')
+if (!email || !password) {
+  const rl = createInterface({ input: process.stdin, output: process.stdout })
+  const question = (q) => new Promise(resolve => rl.question(q, resolve))
+  if (!email)    email    = await question('Email admin : ')
+  if (!password) password = await question(`Mot de passe (min ${MIN_LENGTH} caractères) : `)
+  rl.close()
+}
+
+email    = email.toLowerCase().trim()
+password = password.trim()
+
+if (password.length < MIN_LENGTH) {
+  console.error(`❌ Mot de passe trop court (minimum ${MIN_LENGTH} caractères)`)
   process.exit(1)
 }
 
-const hash = await bcrypt.hash(password, 12)
-
 try {
+  const hash  = await bcrypt.hash(password, 12)
   const admin = await prisma.admin.upsert({
-    where:  { email: email.toLowerCase() },
+    where:  { email },
     update: { password: hash },
-    create: { email: email.toLowerCase(), password: hash },
+    create: { email, password: hash },
   })
-  console.log(`\n✅ Compte admin créé : ${admin.email}`)
+  console.log(`\n✅ Compte admin prêt : ${admin.email}`)
+  console.log('   Connexion : /admin/login')
 } catch (e) {
   console.error('❌ Erreur :', e.message)
+  process.exitCode = 1
 } finally {
-  rl.close()
   await prisma.$disconnect()
 }

@@ -11,7 +11,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSection noel={noel} />
+      <HeroSection noel={noel} title={settings?.heroTitle} subtitle={settings?.heroSubtitle} />
       <ServicesSection />
       <PlankUniSection />
       <RealisationsPreview />

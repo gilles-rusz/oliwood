@@ -10,6 +10,7 @@ const links = [
   { href: '/admin/galerie',   label: 'Galerie photos',  icon: '◻' },
   { href: '/admin/devis',     label: 'Devis reçus',     icon: '✉' },
   { href: '/admin/settings',  label: 'Réglages',        icon: '⚙' },
+  { href: '/admin/compte',    label: 'Mon compte',      icon: '◉' },
 ]
 
 export function AdminSidebar() {

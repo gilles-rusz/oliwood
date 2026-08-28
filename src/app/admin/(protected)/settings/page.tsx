@@ -10,6 +10,24 @@ const THEMES: { value: string | null; label: string; icon: string; desc: string 
   ...SEASONAL_THEMES.map(value => ({ value, ...SEASONAL_LABELS[value] })),
 ]
 
+const TEXT_FIELDS = [
+  'heroTitle', 'heroSubtitle', 'metaDescription', 'telephone', 'email', 'adresse',
+] as const
+
+type TextField = (typeof TEXT_FIELDS)[number]
+type Texts = Record<TextField, string>
+
+const EMPTY_TEXTS = Object.fromEntries(TEXT_FIELDS.map(f => [f, ''])) as Texts
+
+const PLACEHOLDERS: Texts = {
+  heroTitle:       'Le bois, travaillé à votre image.',
+  heroSubtitle:    'Installé à Moirans-en-Montagne, dans le Jura, je conçois et fabrique vos structures bois sur mesure, du devis à la pose.',
+  metaDescription: 'Spécialistes de la construction en bois sur mesure : charpentes, terrasses, pergolas, cabanes.',
+  telephone:       '06 52 14 74 34',
+  email:           'oliwood.eurl@gmail.com',
+  adresse:         '1 Chemin sous Tongea, 39260 Moirans-en-Montagne',
+}
+
 export default function AdminSettingsPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving]   = useState(false)
@@ -18,13 +36,15 @@ export default function AdminSettingsPage() {
   const [theme, setTheme]     = useState<string | null>(null)
   const [active, setActive]   = useState(false)
   const [preview, setPreview] = useState(false)
+  const [texts, setTexts]     = useState<Texts>(EMPTY_TEXTS)
 
   useEffect(() => {
     fetch('/api/admin/settings')
       .then(res => (res.ok ? res.json() : Promise.reject(new Error('Chargement impossible'))))
-      .then(({ seasonalTheme, seasonalActive }) => {
-        setTheme(seasonalTheme)
-        setActive(seasonalActive)
+      .then((data) => {
+        setTheme(data.seasonalTheme)
+        setActive(data.seasonalActive)
+        setTexts(Object.fromEntries(TEXT_FIELDS.map(f => [f, data[f] ?? ''])) as Texts)
       })
       .catch(() => setError('Impossible de charger les réglages actuels.'))
       .finally(() => setLoading(false))
@@ -42,7 +62,11 @@ export default function AdminSettingsPage() {
       const res = await fetch('/api/admin/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ seasonalTheme: theme, seasonalActive: theme ? active : false }),
+        body: JSON.stringify({
+          seasonalTheme: theme,
+          seasonalActive: theme ? active : false,
+          ...texts,
+        }),
       })
       if (!res.ok) throw new Error('Enregistrement impossible')
       setSaved(true)
@@ -119,6 +143,89 @@ export default function AdminSettingsPage() {
             </button>
           </div>
         )}
+      </section>
+
+      {/* Contenu de la page d'accueil */}
+      <section className="bg-dark-800 border border-cream/5 p-6 mb-6">
+        <h2 className="text-sm tracking-widest uppercase text-cream/40 mb-1">Textes de la page d&apos;accueil</h2>
+        <p className="text-cream/50 text-xs mb-5">
+          Laisse un champ vide pour conserver le texte livré avec le site (affiché en gris).
+        </p>
+
+        <div className="space-y-4">
+          <div>
+            <label className="form-label" htmlFor="heroTitle">Titre principal</label>
+            <input
+              id="heroTitle"
+              className="form-input"
+              value={texts.heroTitle}
+              placeholder={PLACEHOLDERS.heroTitle}
+              onChange={e => setTexts({ ...texts, heroTitle: e.target.value })}
+            />
+          </div>
+          <div>
+            <label className="form-label" htmlFor="heroSubtitle">Sous-titre</label>
+            <textarea
+              id="heroSubtitle"
+              rows={2}
+              className="form-input"
+              value={texts.heroSubtitle}
+              placeholder={PLACEHOLDERS.heroSubtitle}
+              onChange={e => setTexts({ ...texts, heroSubtitle: e.target.value })}
+            />
+          </div>
+          <div>
+            <label className="form-label" htmlFor="metaDescription">Description Google (référencement)</label>
+            <textarea
+              id="metaDescription"
+              rows={2}
+              className="form-input"
+              value={texts.metaDescription}
+              placeholder={PLACEHOLDERS.metaDescription}
+              onChange={e => setTexts({ ...texts, metaDescription: e.target.value })}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Coordonnées */}
+      <section className="bg-dark-800 border border-cream/5 p-6 mb-6">
+        <h2 className="text-sm tracking-widest uppercase text-cream/40 mb-1">Coordonnées affichées sur le site</h2>
+        <p className="text-cream/50 text-xs mb-5">Reprises dans le pied de page de toutes les pages.</p>
+
+        <div className="space-y-4">
+          <div>
+            <label className="form-label" htmlFor="telephone">Téléphone</label>
+            <input
+              id="telephone"
+              className="form-input"
+              value={texts.telephone}
+              placeholder={PLACEHOLDERS.telephone}
+              onChange={e => setTexts({ ...texts, telephone: e.target.value })}
+            />
+          </div>
+          <div>
+            <label className="form-label" htmlFor="email">Email de contact</label>
+            <input
+              id="email"
+              type="email"
+              className="form-input"
+              value={texts.email}
+              placeholder={PLACEHOLDERS.email}
+              onChange={e => setTexts({ ...texts, email: e.target.value })}
+            />
+          </div>
+          <div>
+            <label className="form-label" htmlFor="adresse">Adresse de l&apos;atelier</label>
+            <input
+              id="adresse"
+              className="form-input"
+              value={texts.adresse}
+              placeholder={PLACEHOLDERS.adresse}
+              onChange={e => setTexts({ ...texts, adresse: e.target.value })}
+            />
+          </div>
+        </div>
       </section>
 
       {error && <p className="text-sm text-red-400 mb-4">{error}</p>}

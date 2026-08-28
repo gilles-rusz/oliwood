@@ -67,7 +67,8 @@ src/
 │   │   ├── login/
 │   │   ├── dashboard/
 │   │   ├── galerie/         ← Gestion photos
-│   │   └── settings/        ← Réglages + décors saisonniers
+│   │   ├── settings/        ← Réglages, textes, coordonnées, décors saisonniers
+│   │   └── compte/          ← Email et mot de passe de connexion
 │   └── api/
 │       ├── contact/         ← Route devis (honeypot + reCAPTCHA v3)
 │       ├── upload/          ← Upload photos vers Supabase
@@ -89,6 +90,24 @@ src/
 
 ---
 
+## 🔑 Back-office : connexion et compte admin
+
+| Besoin | Commande / écran |
+|---|---|
+| Créer ou réinitialiser le compte | `npm run admin:create` (ou `npm run admin:create -- email "motdepasse"`) |
+| Diagnostiquer une connexion refusée | `npm run admin:check` (ou `npm run admin:check -- email "motdepasse"`) |
+| Générer un hash pour Vercel | `npm run admin:hash -- "MonMotDePasse"` |
+| Changer email / mot de passe | `/admin/compte` |
+
+Sur un environnement où l'on ne peut pas lancer de script (Vercel), renseigner
+`ADMIN_EMAIL` + `ADMIN_PASSWORD_HASH` : la première connexion avec ces
+identifiants crée le compte en base, puis tout se gère depuis `/admin/compte`.
+
+`NEXTAUTH_SECRET` doit être défini partout : sans lui, la session n'est pas
+signée et la connexion échoue en production. La session reste valide 30 jours.
+
+---
+
 ## 🔐 Sécurité
 
 | Mesure | Détail |
@@ -97,7 +116,7 @@ src/
 | **reCAPTCHA v3** | Score < 0.5 → requête rejetée |
 | **Rate limiting** | 5 requêtes / 15 min par IP sur `/api/contact` |
 | **Headers HTTP** | CSP, X-Frame-Options, HSTS via `next.config.js` |
-| **Auth admin** | JWT NextAuth, session 8h, bcrypt sur le mot de passe |
+| **Auth admin** | JWT NextAuth, session 30 jours, bcrypt sur le mot de passe |
 | **Middleware** | Toutes les routes `/admin/*` vérifiées côté serveur |
 | **Upload** | Vérification MIME + taille max 10 Mo |
 

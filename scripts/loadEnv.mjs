@@ -11,8 +11,9 @@ export function loadEnv() {
   for (const line of fs.readFileSync(envPath, 'utf-8').split('\n')) {
     if (!line.trim() || line.trim().startsWith('#')) continue
     const [key, ...vals] = line.split('=')
-    if (key && vals.length) {
-      process.env[key.trim()] = vals.join('=').trim().replace(/^"|"$/g, '')
+    const name = key?.trim()
+    if (name && vals.length && !(name in process.env)) {
+      process.env[name] = vals.join('=').trim().replace(/^"|"$/g, '')
     }
   }
   return envPath

@@ -7,7 +7,16 @@ import { LogoImage } from '@/components/ui/LogoImage'
 
 const MADE_IN_JURA_URL = 'https://www.madeinjura.pro/entreprises/oliwood/'
 
-export function HeroSection({ noel = false }: { noel?: boolean }) {
+const DEFAULT_TITLE    = 'Le bois, travaillé à votre image.'
+const DEFAULT_SUBTITLE = 'Installé à Moirans-en-Montagne, dans le Jura, je conçois et fabrique vos structures bois sur mesure, du devis à la pose.'
+
+interface HeroSectionProps {
+  noel?: boolean
+  title?: string | null
+  subtitle?: string | null
+}
+
+export function HeroSection({ noel = false, title, subtitle }: HeroSectionProps) {
   const contentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -87,7 +96,7 @@ export function HeroSection({ noel = false }: { noel?: boolean }) {
           lineHeight: 1.1,
           marginBottom: '20px',
         }}>
-          Le bois, travaillé à votre image.
+          {title || DEFAULT_TITLE}
         </h1>
 
         <p style={{
@@ -99,7 +108,7 @@ export function HeroSection({ noel = false }: { noel?: boolean }) {
           opacity: .9,
           marginBottom: '34px',
         }}>
-          Installé à Moirans-en-Montagne, dans le Jura, je conçois et fabrique vos structures bois sur mesure, du devis à la pose.
+          {subtitle || DEFAULT_SUBTITLE}
         </p>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px' }}>

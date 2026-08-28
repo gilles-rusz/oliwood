@@ -22,3 +22,15 @@ export async function PATCH(
 
   return NextResponse.json({ devis })
 }
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const session = await getServerSession(authOptions)
+  if (!session) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+
+  await prisma.devis.delete({ where: { id: params.id } })
+
+  return NextResponse.json({ ok: true })
+}

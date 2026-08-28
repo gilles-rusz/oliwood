@@ -1,7 +1,17 @@
 import Link from 'next/link'
+import { getSiteSettings } from '@/lib/settings'
 
-export function Footer() {
-  const year = new Date().getFullYear()
+const DEFAULT_ADRESSE   = '1 Chemin sous Tongea, 39260 Moirans-en-Montagne'
+const DEFAULT_TELEPHONE = '06 52 14 74 34'
+const DEFAULT_EMAIL     = 'oliwood.eurl@gmail.com'
+
+export async function Footer() {
+  const year     = new Date().getFullYear()
+  const settings = await getSiteSettings()
+
+  const adresse   = settings?.adresse   || DEFAULT_ADRESSE
+  const telephone = settings?.telephone || DEFAULT_TELEPHONE
+  const email     = settings?.email     || DEFAULT_EMAIL
 
   return (
     <footer style={{ background: 'var(--brun-fonce)', color: 'var(--gris-clair)', padding: '60px 0 26px' }}>
@@ -68,9 +78,9 @@ export function Footer() {
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {[
-                { label: '📍 1 Chemin sous Tongea, 39260 Moirans-en-Montagne' },
-                { label: '📞 06 52 14 74 34', href: 'tel:+33652147434' },
-                { label: '✉ oliwood.eurl@gmail.com', href: 'mailto:oliwood.eurl@gmail.com' },
+                { label: `📍 ${adresse}` },
+                { label: `📞 ${telephone}`, href: `tel:${telephone.replace(/[^+\d]/g, '')}` },
+                { label: `✉ ${email}`, href: `mailto:${email}` },
                 { label: '🕐 Lun–Sam, 8h–19h' },
                 { label: '📘 Facebook', href: 'https://www.facebook.com/OliWood.OssatureBois' },
               ].map(({ label, href }) => (

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Devis } from '@prisma/client'
 import { clsx } from 'clsx'
 
@@ -37,6 +37,13 @@ export function AdminDevisClient({ devis: initial }: Props) {
   const [devis, setDevis]       = useState<Devis[]>(initial)
   const [selected, setSelected] = useState<Devis | null>(null)
   const [filter, setFilter]     = useState<string>('ALL')
+  const [notes, setNotes]       = useState('')
+  const [notesState, setNotesState] = useState<'idle' | 'saving' | 'saved'>('idle')
+
+  useEffect(() => {
+    setNotes(selected?.notes ?? '')
+    setNotesState('idle')
+  }, [selected])
 
   async function updateStatut(id: string, statut: string) {
     await fetch(`/api/admin/devis/${id}`, {
@@ -46,6 +53,27 @@ export function AdminDevisClient({ devis: initial }: Props) {
     })
     setDevis(prev => prev.map(d => d.id === id ? { ...d, statut: statut as Devis['statut'] } : d))
     if (selected?.id === id) setSelected(prev => prev ? { ...prev, statut: statut as Devis['statut'] } : null)
+  }
+
+  async function saveNotes() {
+    if (!selected) return
+    setNotesState('saving')
+    await fetch(`/api/admin/devis/${selected.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ notes }),
+    })
+    setDevis(prev => prev.map(d => d.id === selected.id ? { ...d, notes } : d))
+    setSelected(prev => prev ? { ...prev, notes } : null)
+    setNotesState('saved')
+    setTimeout(() => setNotesState('idle'), 2500)
+  }
+
+  async function deleteDevis(id: string) {
+    if (!confirm('Supprimer définitivement cette demande ?')) return
+    await fetch(`/api/admin/devis/${id}`, { method: 'DELETE' })
+    setDevis(prev => prev.filter(d => d.id !== id))
+    if (selected?.id === id) setSelected(null)
   }
 
   const filtered = filter === 'ALL' ? devis : devis.filter(d => d.statut === filter)
@@ -77,6 +105,12 @@ export function AdminDevisClient({ devis: initial }: Props) {
               </button>
             )
           })}
+          <a
+            href="/api/admin/devis/export"
+            className="text-[0.65rem] px-3 py-1 border border-cream/10 text-cream/40 tracking-widest uppercase hover:border-cream/25 hover:text-cream ml-auto"
+          >
+            Exporter en CSV
+          </a>
         </div>
 
         {/* Tableau */}
@@ -189,6 +223,26 @@ export function AdminDevisClient({ devis: initial }: Props) {
             </select>
           </div>
 
+          {/* Notes internes */}
+          <div className="border-t border-cream/5 pt-4 mt-4">
+            <p className="text-cream/40 text-xs tracking-widest uppercase mb-2">Notes internes</p>
+            <textarea
+              value={notes}
+              onChange={e => setNotes(e.target.value)}
+              rows={4}
+              placeholder="Visite prévue, prix proposé, relance…"
+              className="form-input text-xs w-full"
+            />
+            <button
+              type="button"
+              onClick={saveNotes}
+              disabled={notesState === 'saving'}
+              className="btn-outline text-xs w-full mt-2"
+            >
+              {notesState === 'saving' ? 'Enregistrement…' : notesState === 'saved' ? '✓ Notes enregistrées' : 'Enregistrer les notes'}
+            </button>
+          </div>
+
           {/* Répondre par email */}
           <a
             href={`mailto:${selected.email}?subject=Votre demande de devis OliWood&body=Bonjour ${selected.prenom},%0D%0A%0D%0A`}
@@ -196,6 +250,20 @@ export function AdminDevisClient({ devis: initial }: Props) {
           >
             Répondre par email
           </a>
+
+          {selected.telephone && (
+            <a href={`tel:${selected.telephone.replace(/\s/g, '')}`} className="btn-outline text-xs w-full text-center mt-2 block">
+              Appeler {selected.telephone}
+            </a>
+          )}
+
+          <button
+            type="button"
+            onClick={() => deleteDevis(selected.id)}
+            className="w-full text-center mt-3 text-[0.65rem] tracking-widest uppercase text-cream/30 hover:text-red-400"
+          >
+            Supprimer la demande
+          </button>
         </div>
       )}
     </div>

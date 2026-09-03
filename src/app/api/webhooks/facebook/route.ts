@@ -1,5 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server'
+import crypto from 'crypto'
 import { prisma } from '@/lib/prisma'
+
+/**
+ * Meta signe chaque livraison avec l'App Secret. Sans cette vérification,
+ * n'importe qui pourrait publier des photos dans la galerie.
+ */
+function hasValidSignature(rawBody: string, header: string | null) {
+  const secret = process.env.META_APP_SECRET
+  if (!secret || !header?.startsWith('sha256=')) return false
+
+  const expected = 'sha256=' + crypto.createHmac('sha256', secret).update(rawBody).digest('hex')
+  const received = Buffer.from(header)
+  const computed = Buffer.from(expected)
+  return received.length === computed.length && crypto.timingSafeEqual(received, computed)
+}
+
+interface FacebookFeedChange {
+  field?: string
+  value?: {
+    item?: string
+    photo_id?: string
+    message?: string
+  }
+}
+
+interface FacebookWebhookBody {
+  object?: string
+  entry?: Array<{ changes?: FacebookFeedChange[] }>
+}
 
 // GET — vérification du webhook par Meta
 export async function GET(req: NextRequest) {
@@ -16,7 +45,17 @@ export async function GET(req: NextRequest) {
 
 // POST — réception des nouvelles photos publiées
 export async function POST(req: NextRequest) {
-  const body = await req.json()
+  const rawBody = await req.text()
+  if (!hasValidSignature(rawBody, req.headers.get('x-hub-signature-256'))) {
+    return NextResponse.json({ error: 'Signature invalide' }, { status: 401 })
+  }
+
+  let body: FacebookWebhookBody
+  try {
+    body = JSON.parse(rawBody)
+  } catch {
+    return NextResponse.json({ error: 'Requête invalide' }, { status: 400 })
+  }
 
   // Vérifier que c'est bien un événement de page
   if (body.object !== 'page') {
@@ -27,7 +66,8 @@ export async function POST(req: NextRequest) {
     for (const change of entry.changes ?? []) {
       // Nouvelle photo publiée sur la Page
       if (change.field === 'feed' && change.value?.item === 'photo') {
-        const { photo_id, photos, message } = change.value
+        const { photo_id, message } = change.value
+        if (!photo_id) continue
 
         // Éviter les doublons
         const exists = await prisma.realisation.findUnique({

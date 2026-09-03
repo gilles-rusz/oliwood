@@ -3,6 +3,21 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { MAX_FEATURED } from '@/lib/gallery'
+import { z } from 'zod'
+
+const CATEGORIES = [
+  'CHARPENTE', 'TERRASSE', 'PERGOLA', 'CARPORT', 'OSSATURE_BOIS',
+  'CABANE', 'RENOVATION', 'AVANT_APRES', 'AUTRE',
+] as const
+
+const schema = z.object({
+  title:       z.string().min(1).max(120).optional(),
+  description: z.string().max(2000).nullable().optional(),
+  category:    z.enum(CATEGORIES).optional(),
+  published:   z.boolean().optional(),
+  featured:    z.boolean().optional(),
+  order:       z.number().int().min(0).max(9999).optional(),
+})
 
 export async function PATCH(
   req: NextRequest,
@@ -11,10 +26,13 @@ export async function PATCH(
   const session = await getServerSession(authOptions)
   if (!session) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
 
-  const body = await req.json()
-  const data: Record<string, unknown> = {}
-  for (const key of ['title', 'description', 'category', 'published', 'featured', 'order'] as const) {
-    if (body[key] !== undefined) data[key] = body[key]
+  const parsed = schema.safeParse(await req.json().catch(() => null))
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Données invalides' }, { status: 400 })
+  }
+  const data: Record<string, unknown> = parsed.data
+  if (Object.keys(data).length === 0) {
+    return NextResponse.json({ error: 'Aucune modification demandée.' }, { status: 400 })
   }
 
   if (data.featured === true) {

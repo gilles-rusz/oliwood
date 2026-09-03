@@ -5,6 +5,14 @@ import { createClient } from '@supabase/supabase-js'
 import { prisma } from '@/lib/prisma'
 import { MAX_FEATURED } from '@/lib/gallery'
 import { v4 as uuidv4 } from 'uuid'
+import type { Category } from '@prisma/client'
+
+const CATEGORIES = [
+  'CHARPENTE', 'TERRASSE', 'PERGOLA', 'CARPORT', 'OSSATURE_BOIS',
+  'CABANE', 'RENOVATION', 'AVANT_APRES', 'AUTRE',
+] as const
+
+const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'avif']
 
 function supabaseClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -25,7 +33,10 @@ export async function POST(req: NextRequest) {
   const formData = await req.formData()
   const file     = formData.get('file') as File | null
   const title    = formData.get('title')    as string
-  const category = formData.get('category') as string
+  const rawCategory = String(formData.get('category') ?? '')
+  const category = (CATEGORIES as readonly string[]).includes(rawCategory)
+    ? rawCategory as Category
+    : 'AUTRE'
   const description = formData.get('description') as string
   let featured = formData.get('featured') === 'true'
 
@@ -41,7 +52,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Fichier trop volumineux (max 10 Mo)' }, { status: 400 })
   }
 
-  const ext      = file.name.split('.').pop()?.toLowerCase() ?? 'jpg'
+  const ext = file.name.split('.').pop()?.toLowerCase() ?? 'jpg'
+  if (!ALLOWED_EXTENSIONS.includes(ext)) {
+    return NextResponse.json({ error: 'Format accepté : JPG, PNG, WebP ou AVIF' }, { status: 400 })
+  }
   const filename = `${uuidv4()}.${ext}`
   const buffer   = Buffer.from(await file.arrayBuffer())
 
@@ -65,8 +79,8 @@ export async function POST(req: NextRequest) {
   // Créer l'entrée en base
   const realisation = await prisma.realisation.create({
     data: {
-      title:       title || filename,
-      category:    category as any,
+      title:       (title || filename).slice(0, 120),
+      category,
       description: description || null,
       imageUrl:    publicUrl,
       thumbUrl:    publicUrl,

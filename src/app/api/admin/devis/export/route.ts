@@ -14,7 +14,10 @@ const COLUMNS = [
 
 function cell(value: unknown) {
   if (value === null || value === undefined) return ''
-  const text = String(value).replace(/"/g, '""')
+  // Une valeur commençant par = + - @ serait interprétée comme formule par Excel :
+  // on la neutralise avec une apostrophe.
+  const raw  = /^[=+\-@\t\r]/.test(String(value)) ? `'${value}` : String(value)
+  const text = raw.replace(/"/g, '""')
   return `"${text}"`
 }
 

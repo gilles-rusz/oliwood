@@ -63,9 +63,19 @@ export async function Footer() {
               Prestations
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {['Carport', 'Pergola', 'Terrasse'].map(item => (
-                <li key={item} style={{ fontFamily: "'Khand', sans-serif", fontWeight: 300, fontSize: '16px', color: 'var(--gris-clair)' }}>
-                  {item}
+              {[
+                { label: 'Carport',  categorie: 'CARPORT' },
+                { label: 'Pergola',  categorie: 'PERGOLA' },
+                { label: 'Terrasse', categorie: 'TERRASSE' },
+              ].map(({ label, categorie }) => (
+                <li key={categorie}>
+                  <Link
+                    href={`/realisations?categorie=${categorie}`}
+                    style={{ fontFamily: "'Khand', sans-serif", fontWeight: 300, fontSize: '16px', color: 'var(--gris-clair)', textDecoration: 'none', transition: 'color .2s' }}
+                    className="hover:text-yellow-300"
+                  >
+                    {label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -78,10 +88,10 @@ export async function Footer() {
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {[
-                { label: `📍 ${adresse}` },
+                { label: `📍 ${adresse}`, href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(adresse)}` },
                 { label: `📞 ${telephone}`, href: `tel:${telephone.replace(/[^+\d]/g, '')}` },
                 { label: `✉ ${email}`, href: `mailto:${email}` },
-                { label: '🕐 Lun–Sam, 8h–19h' },
+                { label: '🕐 Lun–Ven, 8h–19h' },
                 { label: '📘 Facebook', href: 'https://www.facebook.com/OliWood.OssatureBois' },
               ].map(({ label, href }) => (
                 <li key={label} style={{ fontFamily: "'Khand', sans-serif", fontWeight: 300, fontSize: '16px', color: 'var(--gris-clair)' }}>

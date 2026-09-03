@@ -4,12 +4,14 @@ import { useState, useRef, useMemo } from 'react'
 import Image from 'next/image'
 import type { Realisation } from '@prisma/client'
 import { clsx } from 'clsx'
+import { MAX_FEATURED } from '@/lib/gallery'
 
 const CATEGORIES = [
-  { value: 'CARPORT',  label: 'Carport & Abris' },
-  { value: 'TERRASSE', label: 'Terrasse' },
-  { value: 'PERGOLA',  label: 'Pergola' },
-  { value: 'AUTRE',    label: 'Autres' },
+  { value: 'CARPORT',     label: 'Carport & Abris' },
+  { value: 'TERRASSE',    label: 'Terrasse' },
+  { value: 'PERGOLA',     label: 'Pergola' },
+  { value: 'AVANT_APRES', label: 'Avant / Après' },
+  { value: 'AUTRE',       label: 'Autres' },
 ] as const
 
 function photoRef(url: string) {
@@ -33,12 +35,15 @@ export function AdminGalerieClient({ realisations: initial }: Props) {
   const [error, setError]         = useState<string | null>(null)
   const [search, setSearch]       = useState('')
   const [filter, setFilter]       = useState('TOUTES')
+  const [pinError, setPinError]   = useState<string | null>(null)
   const fileRef                   = useRef<HTMLInputElement>(null)
+
+  const featuredCount = useMemo(() => photos.filter(p => p.featured).length, [photos])
 
   const shown = useMemo(() => {
     const q = search.trim().toLowerCase()
     return photos.filter(p =>
-      (filter === 'TOUTES' || p.category === filter) &&
+      (filter === 'TOUTES' || (filter === 'EPINGLEES' ? p.featured : p.category === filter)) &&
       (q === ''
         || p.title.toLowerCase().includes(q)
         || (p.description ?? '').toLowerCase().includes(q)
@@ -78,6 +83,26 @@ export function AdminGalerieClient({ realisations: initial }: Props) {
       body: JSON.stringify({ published: !current }),
     })
     setPhotos(prev => prev.map(p => p.id === id ? { ...p, published: !current } : p))
+  }
+
+  async function toggleFeatured(photo: Realisation) {
+    setPinError(null)
+    const next = !photo.featured
+    if (next && featuredCount >= MAX_FEATURED) {
+      setPinError(`${MAX_FEATURED} photos sont déjà épinglées. Retirez-en une avant d'en épingler une autre.`)
+      return
+    }
+    const res = await fetch(`/api/realisations/${photo.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ featured: next }),
+    })
+    const data = await res.json()
+    if (!res.ok) {
+      setPinError(data.error ?? 'Épinglage impossible, réessayez.')
+      return
+    }
+    setPhotos(prev => prev.map(p => p.id === photo.id ? { ...p, featured: next } : p))
   }
 
   async function deletePhoto(id: string) {
@@ -157,7 +182,9 @@ export function AdminGalerieClient({ realisations: initial }: Props) {
             onChange={e => setForm(f => ({ ...f, featured: e.target.checked }))}
             className="accent-jaune"
           />
-          <span className="text-cream/60 text-xs tracking-widest uppercase">Mettre en avant</span>
+          <span className="text-cream/60 text-xs tracking-widest uppercase">
+            Épingler sur la page d&apos;accueil
+          </span>
         </label>
         <input
           ref={fileRef}
@@ -189,12 +216,17 @@ export function AdminGalerieClient({ realisations: initial }: Props) {
           onChange={e => setFilter(e.target.value)}
         >
           <option value="TOUTES">Toutes les catégories</option>
+          <option value="EPINGLEES">📌 Épinglées</option>
           {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
         </select>
       </div>
-      <p className="text-cream/30 text-[0.65rem] tracking-widest uppercase mb-6">
+      <p className="text-cream/30 text-[0.65rem] tracking-widest uppercase mb-2">
         {shown.length} photo{shown.length > 1 ? 's' : ''} affichée{shown.length > 1 ? 's' : ''} sur {photos.length}
       </p>
+      <p className="text-cream/50 text-[0.65rem] tracking-widest uppercase mb-6">
+        📌 {featuredCount}/{MAX_FEATURED} photo{featuredCount > 1 ? 's' : ''} épinglée{featuredCount > 1 ? 's' : ''} — affichées en haut de la galerie et sur la page d&apos;accueil
+      </p>
+      {pinError && <p className="text-red-400 text-xs mb-4">{pinError}</p>}
 
       {/* Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
@@ -219,7 +251,7 @@ export function AdminGalerieClient({ realisations: initial }: Props) {
               )}
               {p.featured && (
                 <span className="absolute top-2 right-2 text-[0.6rem] bg-jaune text-brun px-2 py-0.5 tracking-widest uppercase font-medium">
-                  ★ En avant
+                  📌 Épinglée
                 </span>
               )}
             </div>
@@ -232,6 +264,18 @@ export function AdminGalerieClient({ realisations: initial }: Props) {
                 </p>
               </div>
               <div className="flex gap-1 shrink-0">
+                <button
+                  onClick={() => toggleFeatured(p)}
+                  className={clsx(
+                    'text-[0.6rem] px-2 py-1 border',
+                    p.featured
+                      ? 'border-jaune/60 text-jaune'
+                      : 'border-cream/10 text-cream/40 hover:text-cream hover:border-cream/30',
+                  )}
+                  title={p.featured ? 'Ôter l’épingle' : 'Épingler en haut de la galerie'}
+                >
+                  📌
+                </button>
                 <button
                   onClick={() => setEditing(p)}
                   className="text-[0.6rem] px-2 py-1 border border-cream/10 text-cream/40 hover:text-cream hover:border-cream/30"
@@ -308,7 +352,9 @@ export function AdminGalerieClient({ realisations: initial }: Props) {
                 onChange={e => setEditing(prev => prev ? { ...prev, featured: e.target.checked } : prev)}
                 className="accent-jaune"
               />
-              <span className="text-cream/60 text-xs tracking-widest uppercase">Mettre en avant</span>
+              <span className="text-cream/60 text-xs tracking-widest uppercase">
+                Épingler sur la page d&apos;accueil ({featuredCount}/{MAX_FEATURED})
+              </span>
             </label>
 
             {error && <p className="text-red-400 text-xs mb-4">{error}</p>}

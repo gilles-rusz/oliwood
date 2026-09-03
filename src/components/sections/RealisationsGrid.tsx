@@ -11,6 +11,7 @@ const CATEGORIES = [
   { value: 'CARPORT',  label: 'Carport & Abris' },
   { value: 'TERRASSE', label: 'Terrasse' },
   { value: 'PERGOLA',  label: 'Pergola' },
+  { value: 'AVANT_APRES', label: 'Avant / Après' },
   { value: 'AUTRE',    label: 'Autres' },
 ]
 
@@ -101,15 +102,11 @@ export function RealisationsGrid({ realisations, activeCategory }: Props) {
                   sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-dark-900/0 group-hover:bg-dark-900/65 transition-all duration-300 flex items-end p-5">
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">
-                    <p className="text-xs tracking-widest text-wood-400 uppercase mb-1">{categoryLabel(r.category)}</p>
-                    <p className="font-display font-bold text-cream">{r.title}</p>
-                    {r.description && (
-                      <p className="text-cream/90 text-xs mt-1 line-clamp-2">{r.description}</p>
-                    )}
-                  </div>
-                </div>
+                {r.featured && (
+                  <span className="absolute top-2 left-2 z-10 text-[0.6rem] bg-wood-400 text-dark-900 px-2 py-0.5 tracking-widest uppercase font-medium">
+                    ★ Coup de cœur
+                  </span>
+                )}
               </button>
             ))}
           </div>

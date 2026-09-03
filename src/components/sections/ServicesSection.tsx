@@ -1,59 +1,20 @@
-const ICON_PROPS = {
-  viewBox: '0 0 48 48',
-  fill: 'none',
-  stroke: 'currentColor',
-  strokeWidth: 1.8,
-  strokeLinecap: 'round' as const,
-  strokeLinejoin: 'round' as const,
-  className: 'service-icon',
-}
-
-function CarportIcon() {
-  return (
-    <svg {...ICON_PROPS} aria-hidden>
-      <path d="M6 20 24 8l18 12" />
-      <path d="M10 20v20M38 20v20" />
-      <path d="M10 24h28" />
-    </svg>
-  )
-}
-
-function TerrasseIcon() {
-  return (
-    <svg {...ICON_PROPS} aria-hidden>
-      <path d="M6 22h36M6 30h36" />
-      <path d="M10 22v-8M18 22v-8M26 22v-8M34 22v-8" />
-      <path d="M8 30v10M40 30v10" />
-    </svg>
-  )
-}
-
-function PergolaIcon() {
-  return (
-    <svg {...ICON_PROPS} aria-hidden>
-      <path d="M8 18 24 9l16 9" />
-      <path d="M6 22h36" />
-      <path d="M12 22v18M36 22v18" />
-      <path d="M18 22v6M24 22v6M30 22v6" />
-    </svg>
-  )
-}
+import Link from 'next/link'
 
 const SERVICES = [
   {
     title: 'Carport & Abris',
-    desc: 'Structures autoportées ou adossées pour protéger véhicules, matériel et bois de chauffage, adaptées à votre terrain.',
-    Icon: CarportIcon,
+    desc: 'Structures autoportées ou adossées pour protéger véhicules, matériel ou bois de chauffage, adaptées à votre terrain.',
+    href: '/realisations?categorie=CARPORT',
   },
   {
     title: 'Terrasse',
     desc: 'Ajout de mètres carrés en bois massif, composite ou exotique à votre espace de vie. De plain-pied ou surélevée avec garde-corps, en fonction de votre projet.',
-    Icon: TerrasseIcon,
+    href: '/realisations?categorie=TERRASSE',
   },
   {
     title: 'Pergola',
     desc: 'Structure permettant d\'abriter votre terrasse, cuisine d\'été ou salon de jardin, avec tout type de couverture selon vos envies. Terrassement possible sur demande.',
-    Icon: PergolaIcon,
+    href: '/realisations?categorie=PERGOLA',
   },
 ]
 
@@ -84,12 +45,12 @@ export function ServicesSection() {
           gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))',
           gap: '24px',
         }}>
-          {SERVICES.map(({ title, desc, Icon }) => (
-            <div key={title} className="service-card">
-              <Icon />
+          {SERVICES.map(({ title, desc, href }) => (
+            <Link key={title} href={href} className="service-card" style={{ textDecoration: 'none' }}>
               <h3>{title}</h3>
               <p>{desc}</p>
-            </div>
+              <span className="service-card-link">Voir les réalisations →</span>
+            </Link>
           ))}
         </div>
       </div>

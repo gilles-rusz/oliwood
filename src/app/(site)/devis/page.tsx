@@ -3,7 +3,7 @@ import { DevisForm } from '@/components/sections/DevisForm'
 
 export const metadata: Metadata = {
   title: 'Demande de Devis',
-  description: 'Décrivez votre projet bois et recevez un devis personnalisé sous 48h.',
+  description: 'Décrivez votre projet bois et recevez un devis personnalisé.',
 }
 
 export default function DevisPage() {
@@ -15,8 +15,7 @@ export default function DevisPage() {
         <h1 className="section-title mb-4">Demande de devis</h1>
         <div className="wood-rule" />
         <p className="devis-intro max-w-xl mx-auto text-sm leading-relaxed mt-4">
-          Décrivez votre projet en quelques étapes.<br />
-          Nous vous répondons sous 48h avec une estimation personnalisée.
+          Décrivez votre projet en quelques étapes.
         </p>
       </div>
 

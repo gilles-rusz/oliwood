@@ -40,9 +40,9 @@ html[data-season='noel'] body {
   background-image: url('/images/texture-bois-noel.jpg');
 }
 
-::-webkit-scrollbar        { width: 6px; }
+::-webkit-scrollbar        { width: 12px; }
 ::-webkit-scrollbar-track  { background: var(--brun-fonce); }
-::-webkit-scrollbar-thumb  { background: var(--jaune); border-radius: 3px; }
+::-webkit-scrollbar-thumb  { background: var(--jaune); border-radius: 6px; }
 ::-webkit-scrollbar-thumb:hover { background: #f0d000; }
 
 ::selection { background: rgba(255,224,20,.35); color: var(--brun-fonce); }
@@ -239,6 +239,14 @@ html[data-season='noel'] body {
   .cards-2x2 { grid-template-columns: 1fr; max-width: 440px; }
 }
 
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 24px;
+  max-width: 1020px;
+  margin: 0 auto;
+}
+
 .card-photo {
   position: relative;
   display: block;
@@ -269,22 +277,33 @@ html[data-season='noel'] body {
     linear-gradient(150deg, #e2bb8b 0%, #cfa069 55%, #b9884f 100%);
 }
 .service-card {
+  display: block;
   padding: 34px 28px 32px;
   transition: transform .25s, box-shadow .25s;
 }
 .paper-card {
   padding: clamp(26px, 4vw, 48px);
 }
-.service-card:hover { transform: translateY(-4px); box-shadow: 0 20px 34px rgba(0, 0, 0, .45); }
 
-.service-icon {
-  display: block;
-  width: 46px;
-  height: 46px;
-  margin-bottom: 22px;
-  color: #4a2c14;
-  opacity: .85;
+/* Page À propos : portrait d'Olivier à droite du texte */
+.about-histoire {
+  display: grid;
+  gap: 26px;
 }
+.about-portrait { max-width: 260px; }
+@media (min-width: 768px) {
+  .about-histoire {
+    grid-template-columns: 1fr 260px;
+    align-items: start;
+  }
+  .about-portrait {
+    order: 2;
+    max-width: none;
+    position: sticky;
+    top: 110px;
+  }
+}
+.service-card:hover { transform: translateY(-4px); box-shadow: 0 20px 34px rgba(0, 0, 0, .45); }
 
 .service-card h3 {
   font-family: 'Oleo Script', cursive;
@@ -309,6 +328,20 @@ html[data-season='noel'] body {
   line-height: 1.55;
   color: #53341a;
 }
+.service-card-link {
+  display: inline-block;
+  margin-top: 18px;
+  font-family: 'Khand', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #3d2410;
+  border-bottom: 2px solid rgba(61, 36, 16, .4);
+  padding-bottom: 2px;
+  transition: border-color .2s;
+}
+.service-card:hover .service-card-link { border-bottom-color: #3d2410; }
 
 /* ══ Formulaire de devis : encarts papier ═════════════════════ */
 

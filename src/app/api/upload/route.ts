@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { createClient } from '@supabase/supabase-js'
 import { prisma } from '@/lib/prisma'
+import { MAX_FEATURED } from '@/lib/gallery'
 import { v4 as uuidv4 } from 'uuid'
 
 function supabaseClient() {
@@ -26,7 +27,7 @@ export async function POST(req: NextRequest) {
   const title    = formData.get('title')    as string
   const category = formData.get('category') as string
   const description = formData.get('description') as string
-  const featured = formData.get('featured') === 'true'
+  let featured = formData.get('featured') === 'true'
 
   if (!file) return NextResponse.json({ error: 'Pas de fichier' }, { status: 400 })
 
@@ -55,6 +56,11 @@ export async function POST(req: NextRequest) {
   }
 
   const { data: { publicUrl } } = supabase.storage.from('realisations').getPublicUrl(filename)
+
+  if (featured) {
+    const alreadyFeatured = await prisma.realisation.count({ where: { featured: true } })
+    if (alreadyFeatured >= MAX_FEATURED) featured = false
+  }
 
   // Créer l'entrée en base
   const realisation = await prisma.realisation.create({

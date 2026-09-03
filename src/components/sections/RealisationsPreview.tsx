@@ -30,12 +30,6 @@ export function RealisationsPreview() {
           }}>
             Quelques réalisations
           </h2>
-          <p style={{
-            fontFamily: "'Khand', sans-serif",
-            fontSize: '19px', color: 'rgba(255,255,255,.92)', fontWeight: 300,
-          }}>
-            Un aperçu de mes projets bois.
-          </p>
         </div>
 
         <div className="cards-2x2">

@@ -18,7 +18,7 @@ export async function getRealisations(opts: GetRealisationsOptions = {}) {
         ...(featured !== undefined && { featured }),
         ...(published !== undefined && { published }),
       },
-      orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+      orderBy: [{ featured: 'desc' }, { order: 'asc' }, { createdAt: 'desc' }],
       take: limit,
     })
   } catch {

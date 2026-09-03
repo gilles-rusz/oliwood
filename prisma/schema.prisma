@@ -44,6 +44,7 @@ enum Category {
   OSSATURE_BOIS
   CABANE
   RENOVATION
+  AVANT_APRES
   AUTRE
 }
 

@@ -27,7 +27,10 @@ export async function POST(req: NextRequest) {
 
   const supabase = supabaseClient()
   if (!supabase) {
-    return NextResponse.json({ error: 'Stockage Supabase non configuré' }, { status: 503 })
+    return NextResponse.json(
+      { error: "L'espace de stockage des photos n'est pas encore configuré sur ce site. Contactez votre webmaster." },
+      { status: 503 },
+    )
   }
 
   const formData = await req.formData()

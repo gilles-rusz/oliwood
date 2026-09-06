@@ -36,6 +36,7 @@ export function AdminGalerieClient({ realisations: initial }: Props) {
   const [search, setSearch]       = useState('')
   const [filter, setFilter]       = useState('TOUTES')
   const [pinError, setPinError]   = useState<string | null>(null)
+  const [uploadError, setUploadError] = useState<string | null>(null)
   const fileRef                   = useRef<HTMLInputElement>(null)
 
   const featuredCount = useMemo(() => photos.filter(p => p.featured).length, [photos])
@@ -55,6 +56,7 @@ export function AdminGalerieClient({ realisations: initial }: Props) {
     const file = e.target.files?.[0]
     if (!file) return
 
+    setUploadError(null)
     setUploading(true)
     try {
       const fd = new FormData()
@@ -65,11 +67,17 @@ export function AdminGalerieClient({ realisations: initial }: Props) {
       fd.append('featured', String(form.featured))
 
       const res  = await fetch('/api/upload', { method: 'POST', body: fd })
-      const data = await res.json()
-      if (data.realisation) {
-        setPhotos(prev => [data.realisation, ...prev])
-        setForm({ title: '', category: 'TERRASSE', description: '', featured: false })
+      const data = await res.json().catch(() => ({}))
+
+      if (!res.ok || !data.realisation) {
+        setUploadError(data.error ?? "L'ajout de la photo a échoué. Réessayez dans un instant.")
+        return
       }
+
+      setPhotos(prev => [data.realisation, ...prev])
+      setForm({ title: '', category: 'TERRASSE', description: '', featured: false })
+    } catch {
+      setUploadError("L'ajout de la photo a échoué. Vérifiez votre connexion et réessayez.")
     } finally {
       setUploading(false)
       if (fileRef.current) fileRef.current.value = ''
@@ -200,6 +208,7 @@ export function AdminGalerieClient({ realisations: initial }: Props) {
         >
           {uploading ? 'Envoi en cours…' : '+ Choisir une photo'}
         </label>
+        {uploadError && <p className="text-red-400 text-xs mt-2">{uploadError}</p>}
       </div>
 
       {/* Recherche et filtre */}

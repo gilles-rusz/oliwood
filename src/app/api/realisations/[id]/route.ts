@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { MAX_FEATURED } from '@/lib/gallery'
 import { z } from 'zod'
+import { revalidatePath } from 'next/cache'
 
 const CATEGORIES = [
   'CHARPENTE', 'TERRASSE', 'PERGOLA', 'CARPORT', 'OSSATURE_BOIS',
@@ -51,6 +52,9 @@ export async function PATCH(
     where: { id: params.id },
     data,
   })
+
+  revalidatePath('/')
+  revalidatePath('/realisations')
 
   return NextResponse.json({ realisation })
 }

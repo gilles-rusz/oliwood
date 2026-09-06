@@ -101,7 +101,7 @@ export function DevisForm() {
       <div className="devis-paper devis-field text-center" style={{ padding: '54px 28px' }}>
         <div className="devis-choice-title" style={{ fontSize: 30 }}>Demande envoyée !</div>
         <p className="devis-choice-desc" style={{ fontSize: 17 }}>
-          Nous avons bien reçu votre demande et vous répondrons sous 48h.
+          Nous avons bien reçu votre demande et revenons vers vous rapidement.
         </p>
       </div>
     )

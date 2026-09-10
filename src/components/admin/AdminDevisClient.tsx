@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { Devis } from '@prisma/client'
 import { clsx } from 'clsx'
 
@@ -14,6 +14,8 @@ const STATUT_COLORS: Record<string, string> = {
   REFUSE:    'text-red-400 bg-red-400/15',
   ARCHIVE:   'text-cream/20 bg-cream/5',
 }
+
+const PAGE_SIZE = 20
 
 const IMPLANTATION_LABELS: Record<string, string> = {
   ADOSSE:    'Adossé à une structure existante',
@@ -39,6 +41,8 @@ export function AdminDevisClient({ devis: initial }: Props) {
   const [filter, setFilter]     = useState<string>('ALL')
   const [notes, setNotes]       = useState('')
   const [notesState, setNotesState] = useState<'idle' | 'saving' | 'saved'>('idle')
+  const [search, setSearch]     = useState('')
+  const [page, setPage]         = useState(1)
 
   useEffect(() => {
     setNotes(selected?.notes ?? '')
@@ -76,7 +80,18 @@ export function AdminDevisClient({ devis: initial }: Props) {
     if (selected?.id === id) setSelected(null)
   }
 
-  const filtered = filter === 'ALL' ? devis : devis.filter(d => d.statut === filter)
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    return devis.filter(d =>
+      (filter === 'ALL' || d.statut === filter) &&
+      (q === '' || [d.prenom, d.nom, d.email, d.telephone, d.ville, d.typeProjet]
+        .some(v => (v ?? '').toLowerCase().includes(q))),
+    )
+  }, [devis, filter, search])
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  const current   = Math.min(page, pageCount)
+  const visible   = filtered.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE)
 
   return (
     <div className="flex flex-col lg:flex-row gap-6">
@@ -85,7 +100,7 @@ export function AdminDevisClient({ devis: initial }: Props) {
         {/* Filtres */}
         <div className="flex flex-wrap gap-2 mb-4">
           <button
-            onClick={() => setFilter('ALL')}
+            onClick={() => { setFilter('ALL'); setPage(1) }}
             className={clsx('text-[0.65rem] px-3 py-1 border tracking-widest uppercase transition-colors',
               filter === 'ALL' ? 'border-wood-400 text-wood-400' : 'border-cream/10 text-cream/30 hover:border-cream/25')}
           >
@@ -97,7 +112,7 @@ export function AdminDevisClient({ devis: initial }: Props) {
             return (
               <button
                 key={s}
-                onClick={() => setFilter(s)}
+                onClick={() => { setFilter(s); setPage(1) }}
                 className={clsx('text-[0.65rem] px-3 py-1 border tracking-widest uppercase transition-colors',
                   filter === s ? 'border-wood-400 text-wood-400' : 'border-cream/10 text-cream/30 hover:border-cream/25')}
               >
@@ -113,11 +128,19 @@ export function AdminDevisClient({ devis: initial }: Props) {
           </a>
         </div>
 
+        {/* Recherche */}
+        <input
+          className="form-input w-full mb-3"
+          value={search}
+          onChange={e => { setSearch(e.target.value); setPage(1) }}
+          placeholder="Rechercher un nom, un email, un téléphone, une ville…"
+        />
+
         {/* Tableau */}
         <div className="space-y-1">
           {filtered.length === 0 ? (
             <p className="text-cream/30 text-sm py-10 text-center">Aucune demande.</p>
-          ) : filtered.map((d) => (
+          ) : visible.map((d) => (
             <div
               key={d.id}
               onClick={() => setSelected(d)}
@@ -165,6 +188,30 @@ export function AdminDevisClient({ devis: initial }: Props) {
             </div>
           ))}
         </div>
+
+        {pageCount > 1 && (
+          <div className="flex items-center justify-between gap-3 mt-4">
+            <button
+              type="button"
+              onClick={() => setPage(current - 1)}
+              disabled={current === 1}
+              className="btn-outline text-[0.65rem] disabled:opacity-30"
+            >
+              ← Précédentes
+            </button>
+            <span className="text-cream/30 text-[0.65rem] tracking-widest uppercase">
+              Page {current} / {pageCount} — {filtered.length} demandes
+            </span>
+            <button
+              type="button"
+              onClick={() => setPage(current + 1)}
+              disabled={current === pageCount}
+              className="btn-outline text-[0.65rem] disabled:opacity-30"
+            >
+              Suivantes →
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Détail */}

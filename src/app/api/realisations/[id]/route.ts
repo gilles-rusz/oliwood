@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { MAX_FEATURED } from '@/lib/gallery'
+import { storageClient, STORAGE_BUCKET, storagePathFromUrl } from '@/lib/storage'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 
@@ -66,6 +67,23 @@ export async function DELETE(
   const session = await getServerSession(authOptions)
   if (!session) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
 
-  await prisma.realisation.delete({ where: { id: params.id } })
+  const realisation = await prisma.realisation.delete({ where: { id: params.id } })
+
+  const paths = [realisation.imageUrl, realisation.thumbUrl]
+    .map(storagePathFromUrl)
+    .filter((path): path is string => path !== null)
+  const uniquePaths = Array.from(new Set(paths))
+
+  if (uniquePaths.length > 0) {
+    const supabase = storageClient()
+    if (supabase) {
+      const { error } = await supabase.storage.from(STORAGE_BUCKET).remove(uniquePaths)
+      if (error) console.error('[Realisations] Suppression du fichier échouée:', error)
+    }
+  }
+
+  revalidatePath('/')
+  revalidatePath('/realisations')
+
   return NextResponse.json({ ok: true })
 }

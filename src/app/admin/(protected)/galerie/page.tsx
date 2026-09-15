@@ -10,10 +10,7 @@ export default async function AdminGaleriePage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="font-display text-2xl font-bold text-cream">Galerie photos</h1>
-        <p className="text-cream/40 text-sm">{realisations.length} photo{realisations.length > 1 ? 's' : ''}</p>
-      </div>
+      <h1 className="font-display text-2xl font-bold text-cream mb-8">Galerie photos</h1>
       <AdminGalerieClient realisations={realisations} />
     </div>
   )

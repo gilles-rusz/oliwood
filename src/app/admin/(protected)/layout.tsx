@@ -1,8 +1,22 @@
+import type { Metadata, Viewport } from 'next'
 import { AdminSidebar } from '@/components/admin/AdminSidebar'
 
 // L'authentification est vérifiée par le middleware (src/middleware.ts).
 // Ce groupe de routes ne contient jamais /admin/login, donc pas de risque
 // de boucle de redirection ici.
+
+export const metadata: Metadata = {
+  title: "Oli'Wood Admin",
+  manifest: '/admin.webmanifest',
+  appleWebApp: { capable: true, title: "Oli'Wood", statusBarStyle: 'black-translucent' },
+  icons: { apple: '/icons/admin-192.png' },
+  robots: { index: false, follow: false },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#0a0804',
+}
+
 export default function ProtectedAdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen bg-dark-900">

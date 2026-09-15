@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { sendDevisEmail } from '@/lib/email'
+import { sendDevisPush } from '@/lib/push'
 import { verifyRecaptcha } from '@/lib/recaptcha'
 import { rateLimit } from '@/lib/rateLimit'
 
@@ -98,6 +99,13 @@ export async function POST(req: NextRequest) {
       await sendDevisEmail(devis)
     } catch (e) {
       console.error('[Contact API] Email non envoyé:', e)
+    }
+
+    // ── Notification push (admin installé sur téléphone) ─────
+    try {
+      await sendDevisPush(devis)
+    } catch (e) {
+      console.error('[Contact API] Notification push non envoyée:', e)
     }
 
     return NextResponse.json({ ok: true })

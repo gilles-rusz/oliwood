@@ -147,15 +147,6 @@ export async function Footer() {
             </a>
           </span>
         </div>
-
-        <div style={{ textAlign: 'center', marginTop: '10px' }}>
-          <Link
-            href="/admin/login"
-            style={{ fontFamily: "'Khand', sans-serif", fontSize: '11px', color: 'rgba(216,207,200,.22)', textDecoration: 'none' }}
-          >
-            Espace admin
-          </Link>
-        </div>
       </div>
     </footer>
   )

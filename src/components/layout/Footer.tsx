@@ -143,7 +143,7 @@ export async function Footer() {
               rel="noopener noreferrer"
               style={{ color: 'rgba(255,224,20,.75)', textDecoration: 'none' }}
             >
-              Web RGS
+              Web RGEst
             </a>
           </span>
         </div>

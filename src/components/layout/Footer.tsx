@@ -135,6 +135,20 @@ export async function Footer() {
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '18px' }}>
+          <span style={{ fontFamily: "'Khand', sans-serif", fontSize: '13px', color: 'rgba(216,207,200,.45)' }}>
+            Site créé par{' '}
+            <a
+              href="https://webrgest.fr"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'rgba(255,224,20,.75)', textDecoration: 'none' }}
+            >
+              Web RGS
+            </a>
+          </span>
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: '10px' }}>
           <Link
             href="/admin/login"
             style={{ fontFamily: "'Khand', sans-serif", fontSize: '11px', color: 'rgba(216,207,200,.22)', textDecoration: 'none' }}

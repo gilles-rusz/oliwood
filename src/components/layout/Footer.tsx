@@ -1,17 +1,9 @@
 import Link from 'next/link'
-import { getSiteSettings } from '@/lib/settings'
-
-const DEFAULT_ADRESSE   = '1 Chemin sous Tongea, 39260 Moirans-en-Montagne'
-const DEFAULT_TELEPHONE = '06 52 14 74 34'
-const DEFAULT_EMAIL     = 'oliwood.eurl@gmail.com'
+import { getContactInfos, FORME_JURIDIQUE, RCS } from '@/lib/contact'
 
 export async function Footer() {
-  const year     = new Date().getFullYear()
-  const settings = await getSiteSettings()
-
-  const adresse   = settings?.adresse   || DEFAULT_ADRESSE
-  const telephone = settings?.telephone || DEFAULT_TELEPHONE
-  const email     = settings?.email     || DEFAULT_EMAIL
+  const year = new Date().getFullYear()
+  const { adresse, telephone, email } = await getContactInfos()
 
   return (
     <footer style={{ background: 'var(--brun-fonce)', color: 'var(--gris-clair)', padding: '60px 0 26px' }}>
@@ -120,7 +112,7 @@ export async function Footer() {
           alignItems: 'center', justifyContent: 'space-between', gap: '12px',
         }}>
           <span style={{ fontFamily: "'Khand', sans-serif", fontSize: '14px', color: 'rgba(216,207,200,.5)' }}>
-            © {year} Oli&apos;Wood — SARL au RCS 883 952 681. Tous droits réservés.
+            © {year} Oli&apos;Wood — {FORME_JURIDIQUE} au RCS {RCS}. Tous droits réservés.
           </span>
           <span style={{ display: 'flex', gap: '20px' }}>
             {[

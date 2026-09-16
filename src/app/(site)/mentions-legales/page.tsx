@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { getContactInfos, RAISON_SOCIALE, FORME_JURIDIQUE, RCS, DIRECTEUR } from '@/lib/contact'
 
 export const metadata: Metadata = {
   title: 'Mentions légales',
@@ -29,7 +30,9 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   )
 }
 
-export default function MentionsLegalesPage() {
+export default async function MentionsLegalesPage() {
+  const { adresse, telephone, email } = await getContactInfos()
+
   return (
     <div style={{ minHeight: '100vh', paddingTop: '120px', paddingBottom: '80px' }}>
       <div className="wrap" style={{ maxWidth: 800 }}>
@@ -58,19 +61,26 @@ export default function MentionsLegalesPage() {
         }}>
 
           <Section title="Éditeur du site">
-            <p><strong>Raison sociale :</strong> Oli&apos;Wood</p>
-            <p><strong>Forme juridique :</strong> [À COMPLÉTER]</p>
+            <p><strong>Raison sociale :</strong> {RAISON_SOCIALE}</p>
+            <p><strong>Forme juridique :</strong> {FORME_JURIDIQUE}</p>
+            <p><strong>RCS :</strong> {RCS}</p>
             <p><strong>SIRET :</strong> [À COMPLÉTER]</p>
-            <p><strong>Adresse du siège social :</strong> [À COMPLÉTER] — Jura (39), France</p>
-            <p><strong>Téléphone :</strong> [À COMPLÉTER]</p>
-            <p><strong>E-mail :</strong> contact@oliwood.fr</p>
-            <p><strong>Directeur de la publication :</strong> [À COMPLÉTER]</p>
+            <p><strong>Adresse du siège social :</strong> {adresse} — France</p>
+            <p><strong>Téléphone :</strong>{' '}
+              <a href={`tel:${telephone.replace(/[^+\d]/g, '')}`} style={{ color: 'var(--brun)' }}>{telephone}</a>
+            </p>
+            <p><strong>E-mail :</strong>{' '}
+              <a href={`mailto:${email}`} style={{ color: 'var(--brun)' }}>{email}</a>
+            </p>
+            <p><strong>Directeur de la publication :</strong> {DIRECTEUR}</p>
           </Section>
 
           <Section title="Hébergement">
-            <p><strong>Hébergeur :</strong> [À COMPLÉTER]</p>
-            <p><strong>Adresse :</strong> [À COMPLÉTER]</p>
-            <p><strong>Site web :</strong> [À COMPLÉTER]</p>
+            <p><strong>Hébergeur :</strong> Vercel Inc.</p>
+            <p><strong>Adresse :</strong> 340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis</p>
+            <p><strong>Site web :</strong>{' '}
+              <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brun)' }}>vercel.com</a>
+            </p>
           </Section>
 
           <Section title="Propriété intellectuelle">
@@ -88,8 +98,10 @@ export default function MentionsLegalesPage() {
           </Section>
 
           <Section title="Crédits">
-            <p><strong>Conception & développement :</strong> [À COMPLÉTER]</p>
-            <p><strong>Photographies :</strong> [À COMPLÉTER]</p>
+            <p><strong>Conception &amp; développement :</strong>{' '}
+              <a href="https://webrgest.fr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brun)' }}>Web RG Est</a>
+            </p>
+            <p><strong>Photographies :</strong> Oli&apos;Wood</p>
           </Section>
 
           <Section title="Responsabilité">

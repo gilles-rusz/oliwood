@@ -3,7 +3,7 @@ import { getContactInfos } from '@/lib/contact'
 
 export const metadata: Metadata = {
   title: 'Politique de confidentialité',
-  description: 'Politique de confidentialité et traitement des données personnelles — Oli\'Wood.',
+  description: 'Politique de confidentialité et traitement des données personnelles d\'Oli\'Wood.',
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -76,7 +76,7 @@ export default async function PolitiqueConfidentialitePage() {
           }}>
             La présente politique de confidentialité décrit la manière dont Oli&apos;Wood collecte,
             utilise et protège les données personnelles recueillies via ce site, conformément
-            au Règlement Général sur la Protection des Données (RGPD — UE 2016/679).
+            au Règlement Général sur la Protection des Données (RGPD, UE 2016/679).
           </p>
 
           <Section title="Données collectées">
@@ -116,11 +116,11 @@ export default async function PolitiqueConfidentialitePage() {
           <Section title="Vos droits">
             <p>Conformément au RGPD, vous disposez des droits suivants :</p>
             <ul style={{ listStyle: 'none', padding: 0, marginTop: '10px' }}>
-              <Li><strong>Droit d&apos;accès</strong> — obtenir une copie des données vous concernant</Li>
-              <Li><strong>Droit de rectification</strong> — corriger des données inexactes ou incomplètes</Li>
-              <Li><strong>Droit à l&apos;effacement</strong> — demander la suppression de vos données</Li>
-              <Li><strong>Droit d&apos;opposition</strong> — vous opposer à un traitement basé sur l&apos;intérêt légitime</Li>
-              <Li><strong>Droit à la portabilité</strong> — récupérer vos données dans un format structuré</Li>
+              <Li><strong>Droit d&apos;accès</strong> : obtenir une copie des données vous concernant</Li>
+              <Li><strong>Droit de rectification</strong> : corriger des données inexactes ou incomplètes</Li>
+              <Li><strong>Droit à l&apos;effacement</strong> : demander la suppression de vos données</Li>
+              <Li><strong>Droit d&apos;opposition</strong> : vous opposer à un traitement basé sur l&apos;intérêt légitime</Li>
+              <Li><strong>Droit à la portabilité</strong> : récupérer vos données dans un format structuré</Li>
             </ul>
             <p style={{ marginTop: '12px' }}>
               Pour exercer ces droits, contactez-nous à : <strong>{email}</strong>.
@@ -142,7 +142,7 @@ export default async function PolitiqueConfidentialitePage() {
 
           <Section title="Contact">
             <p>
-              Responsable du traitement : Oli&apos;Wood — {adresse} — France
+              Responsable du traitement : Oli&apos;Wood, {adresse}, France
               <br />
               E-mail : {email}
               <br />

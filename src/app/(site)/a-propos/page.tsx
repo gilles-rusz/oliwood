@@ -124,7 +124,16 @@ export default function AProposPage({ searchParams }: PageProps) {
                 Dans mon atelier, chaque pièce est ensuite façonnée avec soin et précision, en respectant au maximum les caractéristiques naturelles de la matière. Le bois n&apos;est pas simplement un matériau : ses nuances, ses textures et ses imperfections participent pleinement à l&apos;identité de chaque création.
               </p>
               <p>
-                Cette attention se prolonge jusqu&apos;aux moindres résidus de fabrication. Dans une démarche de valorisation de la matière, les copeaux et chutes issus du rabotage sont collectés puis réutilisés par une ferme locale comme litière et paillage.
+                Cette attention se prolonge jusqu&apos;aux moindres résidus de fabrication. Dans une démarche de valorisation de la matière, les copeaux et chutes issus du rabotage sont collectés puis réutilisés par{' '}
+                <a
+                  href="https://lafermeauxoeufsbleus.fr/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: 'var(--color-accent-dark)', textDecoration: 'underline' }}
+                >
+                  une ferme locale
+                </a>{' '}
+                comme litière et paillage.
               </p>
               <p>
                 De la forêt à l&apos;atelier, puis de l&apos;atelier à la ferme, chaque étape est pensée pour préserver la matière, favoriser les circuits courts et donner au bois une seconde vie.

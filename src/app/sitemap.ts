@@ -6,6 +6,7 @@ const PATHS = [
   { path: '/realisations', priority: 0.9 },
   { path: '/a-propos', priority: 0.7 },
   { path: '/devis', priority: 0.8 },
+  { path: '/cgv', priority: 0.2 },
   { path: '/mentions-legales', priority: 0.2 },
   { path: '/politique-confidentialite', priority: 0.2 },
 ]

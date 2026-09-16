@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
+// Le back-office affiche toujours l'état réel de la base, jamais une page en cache.
+export const dynamic = 'force-dynamic'
+
 export const viewport: Viewport = {
   themeColor: '#0a0804',
 }

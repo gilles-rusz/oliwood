@@ -37,6 +37,10 @@ export default function AdminSettingsPage() {
   const [active, setActive]   = useState(false)
   const [preview, setPreview] = useState(false)
   const [texts, setTexts]     = useState<Texts>(EMPTY_TEXTS)
+  const [saisi, setSaisi]     = useState<string | null>(null)
+
+  const courant = JSON.stringify({ theme, active: theme ? active : false, texts })
+  const modifie = saisi !== null && saisi !== courant
 
   useEffect(() => {
     fetch('/api/admin/settings')
@@ -44,7 +48,13 @@ export default function AdminSettingsPage() {
       .then((data) => {
         setTheme(data.seasonalTheme)
         setActive(data.seasonalActive)
-        setTexts(Object.fromEntries(TEXT_FIELDS.map(f => [f, data[f] ?? ''])) as Texts)
+        const chargés = Object.fromEntries(TEXT_FIELDS.map(f => [f, data[f] ?? ''])) as Texts
+        setTexts(chargés)
+        setSaisi(JSON.stringify({
+          theme: data.seasonalTheme,
+          active: data.seasonalTheme ? data.seasonalActive : false,
+          texts: chargés,
+        }))
       })
       .catch(() => setError('Impossible de charger les réglages actuels.'))
       .finally(() => setLoading(false))
@@ -69,8 +79,9 @@ export default function AdminSettingsPage() {
         }),
       })
       if (!res.ok) throw new Error('Enregistrement impossible')
+      setSaisi(courant)
       setSaved(true)
-      setTimeout(() => setSaved(false), 3000)
+      setTimeout(() => setSaved(false), 8000)
     } catch {
       setError("L'enregistrement a échoué. Réessaie dans un instant.")
     } finally {
@@ -230,13 +241,32 @@ export default function AdminSettingsPage() {
 
       {error && <p className="text-sm text-red-400 mb-4">{error}</p>}
 
-      <button
-        onClick={saveSettings}
-        disabled={saving || loading}
-        className="btn-primary"
-      >
-        {loading ? 'Chargement…' : saving ? 'Enregistrement…' : saved ? '✓ Enregistré' : 'Enregistrer'}
-      </button>
+      {modifie && (
+        <p className="text-sm text-jaune mb-3">
+          Modifications non enregistrées : clique sur « Enregistrer » pour les appliquer sur le site.
+        </p>
+      )}
+
+      <div className="flex flex-wrap items-center gap-4">
+        <button
+          onClick={saveSettings}
+          disabled={saving || loading}
+          className="btn-primary"
+        >
+          {loading ? 'Chargement…' : saving ? 'Enregistrement…' : saved ? '✓ Enregistré' : 'Enregistrer'}
+        </button>
+
+        {saved && (
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs tracking-widest uppercase text-jaune underline underline-offset-4"
+          >
+            Voir le site
+          </a>
+        )}
+      </div>
     </div>
   )
 }

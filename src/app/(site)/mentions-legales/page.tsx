@@ -71,7 +71,7 @@ export default async function MentionsLegalesPage() {
             <p><strong>SIRET (siège) :</strong> {SIRET}</p>
             <p><strong>RCS :</strong> {RCS}</p>
             <p><strong>N° de TVA intracommunautaire :</strong> {TVA}</p>
-            <p><strong>Adresse du siège social :</strong> {adresse} — France</p>
+            <p><strong>Adresse du siège social :</strong> {adresse}, France</p>
             <p><strong>Téléphone :</strong>{' '}
               <a href={`tel:${telephone.replace(/[^+\d]/g, '')}`} style={{ color: 'var(--brun)' }}>{telephone}</a>
             </p>

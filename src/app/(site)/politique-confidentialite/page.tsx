@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { getContactInfos } from '@/lib/contact'
 
 export const metadata: Metadata = {
   title: 'Politique de confidentialité',
@@ -38,7 +39,9 @@ function Li({ children }: { children: React.ReactNode }) {
   )
 }
 
-export default function PolitiqueConfidentialitePage() {
+export default async function PolitiqueConfidentialitePage() {
+  const { adresse, telephone, email } = await getContactInfos()
+
   return (
     <div style={{ minHeight: '100vh', paddingTop: '120px', paddingBottom: '80px' }}>
       <div className="wrap" style={{ maxWidth: 800 }}>
@@ -120,7 +123,7 @@ export default function PolitiqueConfidentialitePage() {
               <Li><strong>Droit à la portabilité</strong> — récupérer vos données dans un format structuré</Li>
             </ul>
             <p style={{ marginTop: '12px' }}>
-              Pour exercer ces droits, contactez-nous à : <strong>contact@oliwood.fr</strong>.
+              Pour exercer ces droits, contactez-nous à : <strong>{email}</strong>.
               En cas de litige, vous pouvez saisir la <strong>CNIL</strong> (cnil.fr).
             </p>
           </Section>
@@ -139,9 +142,11 @@ export default function PolitiqueConfidentialitePage() {
 
           <Section title="Contact">
             <p>
-              Responsable du traitement : Oli&apos;Wood — [À COMPLÉTER : adresse] — Jura (39), France
+              Responsable du traitement : Oli&apos;Wood — {adresse} — France
               <br />
-              E-mail : contact@oliwood.fr
+              E-mail : {email}
+              <br />
+              Téléphone : {telephone}
             </p>
           </Section>
 

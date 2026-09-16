@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
-import { getContactInfos, RAISON_SOCIALE, FORME_JURIDIQUE, RCS, DIRECTEUR } from '@/lib/contact'
+import {
+  getContactInfos,
+  RAISON_SOCIALE, FORME_JURIDIQUE, CAPITAL_SOCIAL, SIREN, SIRET, RCS, TVA, DIRECTEUR,
+} from '@/lib/contact'
 
 export const metadata: Metadata = {
   title: 'Mentions légales',
@@ -63,8 +66,11 @@ export default async function MentionsLegalesPage() {
           <Section title="Éditeur du site">
             <p><strong>Raison sociale :</strong> {RAISON_SOCIALE}</p>
             <p><strong>Forme juridique :</strong> {FORME_JURIDIQUE}</p>
+            <p><strong>Capital social :</strong> {CAPITAL_SOCIAL}</p>
+            <p><strong>SIREN :</strong> {SIREN}</p>
+            <p><strong>SIRET (siège) :</strong> {SIRET}</p>
             <p><strong>RCS :</strong> {RCS}</p>
-            <p><strong>SIRET :</strong> [À COMPLÉTER]</p>
+            <p><strong>N° de TVA intracommunautaire :</strong> {TVA}</p>
             <p><strong>Adresse du siège social :</strong> {adresse} — France</p>
             <p><strong>Téléphone :</strong>{' '}
               <a href={`tel:${telephone.replace(/[^+\d]/g, '')}`} style={{ color: 'var(--brun)' }}>{telephone}</a>

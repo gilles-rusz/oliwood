@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { SeasonalDecorations } from '@/components/ui/SeasonalDecorations'
 import { getSiteSettings } from '@/lib/settings'
 
 const DEFAULT_DESCRIPTION = 'Spécialistes de la construction en bois sur mesure : charpentes, terrasses, pergolas, cabanes. Artisans passionnés.'
@@ -31,13 +30,11 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const settings = await getSiteSettings()
-
   return (
     <html lang="fr">
       <head>
@@ -48,13 +45,7 @@ export default async function RootLayout({
           defer
         />
       </head>
-      <body>
-        {/* Décorations saisonnières (Noël, etc.) */}
-        {settings?.seasonalActive && settings.seasonalTheme && (
-          <SeasonalDecorations theme={settings.seasonalTheme} />
-        )}
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   )
 }

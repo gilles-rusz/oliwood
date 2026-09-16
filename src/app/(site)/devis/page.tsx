@@ -17,6 +17,15 @@ export default function DevisPage() {
         <p className="devis-intro max-w-xl mx-auto text-sm leading-relaxed mt-4">
           Décrivez votre projet en quelques étapes.
         </p>
+        <a
+          href="/cgv"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-ghost-ow"
+          style={{ marginTop: '18px', display: 'inline-block', fontSize: '14px', padding: '10px 18px' }}
+        >
+          Conditions générales (CGV / CGU)
+        </a>
       </div>
 
       <div className="max-w-2xl mx-auto px-4">

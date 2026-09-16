@@ -124,6 +124,7 @@ export async function Footer() {
           </span>
           <span style={{ display: 'flex', gap: '20px' }}>
             {[
+              { label: 'CGV / CGU',                   href: '/cgv' },
               { label: 'Mentions légales',            href: '/mentions-legales' },
               { label: 'Politique de confidentialité', href: '/politique-confidentialite' },
             ].map(({ label, href }) => (

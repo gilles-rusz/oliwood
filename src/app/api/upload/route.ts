@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { storageClient, STORAGE_BUCKET } from '@/lib/storage'
+import { storageConfigured, uploadImage } from '@/lib/storage'
 import { prisma } from '@/lib/prisma'
 import { MAX_FEATURED } from '@/lib/gallery'
 import { v4 as uuidv4 } from 'uuid'
@@ -18,8 +18,7 @@ export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
   if (!session) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
 
-  const supabase = storageClient()
-  if (!supabase) {
+  if (!storageConfigured()) {
     return NextResponse.json(
       { error: "L'espace de stockage des photos n'est pas encore configuré sur ce site. Contactez votre webmaster." },
       { status: 503 },
@@ -55,17 +54,11 @@ export async function POST(req: NextRequest) {
   const filename = `${uuidv4()}.${ext}`
   const buffer   = Buffer.from(await file.arrayBuffer())
 
-  // Upload vers Supabase Storage
-  const { error: uploadError } = await supabase.storage
-    .from(STORAGE_BUCKET)
-    .upload(filename, buffer, { contentType: file.type, upsert: false })
-
-  if (uploadError) {
-    console.error('[Upload] Supabase error:', uploadError)
+  const uploaded = await uploadImage(filename, buffer, file.type)
+  if ('error' in uploaded) {
     return NextResponse.json({ error: 'Erreur upload' }, { status: 500 })
   }
-
-  const { data: { publicUrl } } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(filename)
+  const publicUrl = uploaded.url
 
   if (featured) {
     const alreadyFeatured = await prisma.realisation.count({ where: { featured: true } })

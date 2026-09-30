@@ -1,6 +1,6 @@
 # OliWood — Site Web
 
-Stack : **Next.js 14** · **Supabase** · **Prisma** · **NextAuth** · **Tailwind CSS**
+Stack : **Next.js 14** · **Vercel Blob** · **Prisma** · **NextAuth** · **Tailwind CSS**
 
 ---
 
@@ -49,8 +49,8 @@ catégories et statuts modifiés depuis l'admin sont conservés.
 Chaque vignette de l'admin affiche la référence de sa photo (par ex. `pergola-07`), et un champ de
 recherche permet de retrouver une photo par titre, description ou référence.
 
-Les photos ajoutées ensuite depuis l'admin sont, elles, envoyées dans le bucket Supabase Storage
-`realisations` ; les deux sources s'affichent dans la même galerie.
+Les photos ajoutées ensuite depuis l'admin sont, elles, envoyées sur Vercel Blob (préfixe
+`realisations/`) ; les deux sources s'affichent dans la même galerie.
 
 ---
 
@@ -71,7 +71,7 @@ src/
 │   │   └── compte/          ← Email et mot de passe de connexion
 │   └── api/
 │       ├── contact/         ← Route devis (honeypot + reCAPTCHA v3)
-│       ├── upload/          ← Upload photos vers Supabase
+│       ├── upload/          ← Upload photos vers Vercel Blob
 │       ├── realisations/    ← CRUD photos
 │       ├── admin/settings/  ← Réglages site
 │       └── webhooks/facebook/ ← Sync auto Facebook → galerie
@@ -131,11 +131,15 @@ signée et la connexion échoue en production. La session reste valide 30 jours.
 
 ---
 
-## 📸 Ajout photo Supabase
+## 📸 Stockage des photos
 
-Dans le dashboard Supabase :
-1. Créer un bucket `realisations` (public)
-2. Activer les policies de lecture publique
+Dans le dashboard Vercel : Storage → Create → **Blob**, puis relier le store au projet.
+Vercel ajoute alors `BLOB_READ_WRITE_TOKEN` aux variables d'environnement et l'upload admin
+fonctionne (redéploiement nécessaire).
+
+Si `BLOB_READ_WRITE_TOKEN` est absent, l'upload retombe sur Supabase Storage (bucket public
+`realisations`). Les variables Supabase restent utiles pour supprimer les photos déjà stockées
+là-bas.
 
 ---
 

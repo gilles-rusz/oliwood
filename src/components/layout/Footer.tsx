@@ -112,7 +112,7 @@ export async function Footer() {
           alignItems: 'center', justifyContent: 'space-between', gap: '12px',
         }}>
           <span style={{ fontFamily: "'Khand', sans-serif", fontSize: '14px', color: 'rgba(216,207,200,.5)' }}>
-            © {year} Oli&apos;Wood — EURL au capital de {CAPITAL_SOCIAL}, {RCS}. Tous droits réservés.
+            © {year} Oli&apos;Wood, EURL au capital de {CAPITAL_SOCIAL}, {RCS}. Tous droits réservés.
           </span>
           <span style={{ display: 'flex', gap: '20px' }}>
             {[
